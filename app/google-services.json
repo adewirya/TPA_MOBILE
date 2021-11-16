@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "698891210186",
+    "project_id": "sunibtinder-eb42f",
+    "storage_bucket": "sunibtinder-eb42f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:698891210186:android:8612553f80863ee31c1333",
+        "android_client_info": {
+          "package_name": "edu.bluejack21_1.SunibTinder"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "698891210186-tm0au362c2icmruug79dsqpfkrvhono2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDb6iW0aIct9bLX_F2ycNTd6gucPeLOCGo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "698891210186-tm0au362c2icmruug79dsqpfkrvhono2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
