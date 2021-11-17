@@ -3,6 +3,7 @@ package edu.bluejack21_1.SunibTinder
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.Toast
 import androidx.viewpager.widget.ViewPager
@@ -22,14 +23,14 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
 //        binding = ActivityMainBinding.inflate(layoutInflater)
-        binding2 = LoginPageBinding.inflate(layoutInflater)
-        val view = binding2.root
-        setContentView(view)
 
-        val viewPager = binding2.viewPager
+
+        setContentView(R.layout.login_page)
+
+        val viewPager = findViewById<ViewPager>(R.id.viewPager)
         viewPager.adapter = PageAdapter(supportFragmentManager)
 
-        val tabLayout = binding2.tabLayout
+        val tabLayout = findViewById<TabLayout>(R.id.tabLayout)
         tabLayout.setupWithViewPager(viewPager)
 //        setContentView(R.layout.activity_main)
 
