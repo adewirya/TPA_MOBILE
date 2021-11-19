@@ -5,4 +5,17 @@
     <string name="password">Password</string>
     <string name="login">Login</string>
     <string name="email_binus_ac_id">Email@binus.ac.id</string>
+    <string name="full_name">Full Name</string>
+
+    <string-array name="binus_locations">
+        <item>Anggrek</item>
+        <item>Syahdan</item>
+        <item>Kijang</item>
+        <item>Alam Sutera</item>
+        <item>Bekasi</item>
+        <item>Bandung</item>
+        <item>Malang</item>
+        <item>JWC</item>
+        <item>ASO</item>
+    </string-array>
 </resources>

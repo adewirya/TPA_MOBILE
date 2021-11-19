@@ -4,17 +4,10 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/62822/Documents/Asslab/TPA/TPA_Mobile/app/src/main/res/layout/activity_main.xml" value="0.13020833333333334" />
-<<<<<<< HEAD
         <entry key="..\:/Users/62822/Documents/Asslab/TPA/TPA_Mobile/app/src/main/res/layout/fragment_login.xml" value="0.264" />
-        <entry key="..\:/Users/62822/Documents/Asslab/TPA/TPA_Mobile/app/src/main/res/layout/fragment_register.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/62822/Documents/Asslab/TPA/TPA_Mobile/app/src/main/res/layout/fragment_register.xml" value="0.264" />
         <entry key="..\:/Users/62822/Documents/Asslab/TPA/TPA_Mobile/app/src/main/res/layout/login_page.xml" value="0.264" />
         <entry key="..\:/Users/62822/Documents/Asslab/TPA/TPA_Mobile/app/src/main/res/layout/tes_figma.xml" value="0.13020833333333334" />
-=======
-        <entry key="..\:/Users/maver/Desktop/bimbing/TPA_MOBILE/app/src/main/res/layout/activity_main.xml" value="0.13333333333333333" />
-        <entry key="..\:/Users/maver/Desktop/bimbing/TPA_MOBILE/app/src/main/res/layout/fragment_login.xml" value="0.264" />
-        <entry key="..\:/Users/maver/Desktop/bimbing/TPA_MOBILE/app/src/main/res/layout/fragment_register.xml" value="0.13385416666666666" />
-        <entry key="..\:/Users/maver/Desktop/bimbing/TPA_MOBILE/app/src/main/res/layout/login_page.xml" value="0.1" />
->>>>>>> ab926236913d162a40850720ab14ca6d5e986689
       </map>
     </option>
   </component>
