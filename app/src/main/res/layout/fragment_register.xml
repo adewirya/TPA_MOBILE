@@ -16,6 +16,17 @@
         app:layout_constraintTop_toBottomOf="@+id/FullName"
         tools:ignore="MissingConstraints" />
 
+    <Spinner
+        android:id="@+id/GenderSpinner"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="64dp"
+        app:layout_constraintEnd_toEndOf="@+id/FullName"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/FullName"
+        app:layout_constraintTop_toBottomOf="@+id/FullName"
+        tools:ignore="MissingConstraints" />
+
     <EditText
         android:id="@+id/Email"
         android:layout_width="0dp"
@@ -57,6 +68,21 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Email"
         tools:ignore="MissingConstraints" />
+
+    <Button
+        android:id="@+id/registerButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="35dp"
+        android:layout_marginEnd="8dp"
+        android:backgroundTint="@color/MainColor"
+        android:text="Register"
+        android:textColor="@color/White"
+        app:cornerRadius="@android:dimen/app_icon_size"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/GenderSpinner" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

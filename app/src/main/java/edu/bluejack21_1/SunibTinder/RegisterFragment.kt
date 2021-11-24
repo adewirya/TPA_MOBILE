@@ -6,7 +6,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.EditText
 import android.widget.Spinner
+import androidx.viewbinding.ViewBindings
+import edu.bluejack21_1.SunibTinder.databinding.ActivityMainBinding
+import edu.bluejack21_1.SunibTinder.databinding.FragmentRegisterBinding
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -23,14 +27,21 @@ class RegisterFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
     private lateinit var spinner: Spinner
-//
+    private lateinit var spinner2 : Spinner
+    private lateinit var binding : FragmentRegisterBinding
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-    }
 
+        var registBtn = binding.registerButton
+
+//      Spinner mySpinner = (Spinner) findViewById(R.id.your_spinner);
+//      String text = mySpinner.getSelectedItem().toString();
+//        registBtn.setOnClickListener()
+
+    }
 
 
     override fun onCreateView(
@@ -39,6 +50,18 @@ class RegisterFragment : Fragment() {
     ): View? {
         val v = inflater.inflate(R.layout.fragment_register, container, false)
         spinner = v.findViewById(R.id.locationSpinner)
+
+        spinner2 = v.findViewById(R.id.GenderSpinner)
+
+        ArrayAdapter.createFromResource(
+            this.requireContext(),
+            R.array.genders,
+            android.R.layout.simple_spinner_item
+        ).also { adapter2 ->
+            adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            spinner2.adapter = adapter2
+        }
+
         ArrayAdapter.createFromResource(
             this.requireContext(),
             R.array.binus_locations,
