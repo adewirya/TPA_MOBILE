@@ -5,6 +5,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
+import edu.bluejack21_1.SunibTinder.databinding.FragmentLoginBinding
+import edu.bluejack21_1.SunibTinder.databinding.FragmentRegisterBinding
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -20,6 +25,10 @@ class LoginFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+    val db = Firebase.firestore
+
+    private var v: FragmentLoginBinding? = null
+    private val binding get() = v!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,7 +43,45 @@ class LoginFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_login, container, false)
+        v = FragmentLoginBinding.inflate(inflater, container, false)
+
+        var loginBtn = binding.loginBtn
+
+        loginBtn.setOnClickListener{
+            checkExistsUser {
+                e->
+                if (!e){
+                    Toast.makeText(
+                        this.requireContext(),
+                        "Wrong email / password",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+                else {
+                    // redirect ke home
+                }
+            }
+        }
+
+        return v!!.root
+    }
+
+    private fun checkExistsUser(callback: (Boolean) -> Unit){
+
+
+        var email = binding.email.text.toString()
+        var password = binding.password.text.toString()
+
+        db.collection("users").whereEqualTo("email",email)
+            .whereEqualTo("password",password).get().addOnSuccessListener { e->
+                if (e.size() < 0){
+                    callback(false)
+                }
+                else {
+                    callback(true)
+                }
+            }
+
     }
 
     companion object {

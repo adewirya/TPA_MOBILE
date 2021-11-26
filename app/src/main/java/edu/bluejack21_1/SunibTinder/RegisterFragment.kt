@@ -1,6 +1,7 @@
 package edu.bluejack21_1.SunibTinder
 
 import android.os.Bundle
+import android.text.BoringLayout
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -11,6 +12,7 @@ import android.widget.EditText
 import android.widget.Spinner
 import android.widget.Toast
 import androidx.viewbinding.ViewBindings
+import com.google.firebase.firestore.core.ViewSnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import edu.bluejack21_1.SunibTinder.databinding.FragmentRegisterBinding
@@ -36,6 +38,18 @@ class RegisterFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+    }
+
+    private fun checkEmailExists(email: String, callback: (Boolean) -> Unit) {
+        db.collection("users").whereEqualTo("email",email).get().addOnSuccessListener {
+            doc ->
+            if (doc.size() > 0){
+                callback(false)
+            }
+            else{
+                callback(true)
+            }
+        }
     }
 
     private  fun  validateRegister() {
@@ -72,36 +86,41 @@ class RegisterFragment : Fragment() {
             ).show()
             return
         }
-        else {
-//            Toast.makeText(
-//                this.requireContext(),
-//                "masuk anjai",
-//                Toast.LENGTH_SHORT
-//            ).show()
-            val data = hashMapOf(
-                "FullName" to fullName,
-                "Alias" to "",
-                "Email" to email,
-                "Password" to password,
-                "FromGoogle" to false,
-                "Location" to location,
-                "Gender" to gender,
-                "City" to "",
-                "Passions" to arrayOf<String>(),
-                "Age" to 0,
-                "Bio" to "",
-                "Profile" to "",
-                "Carousel" to arrayOf<String>()
-            )
 
-            db.collection("users").add(data).addOnSuccessListener { documentReference ->
-                Log.d("add new user", "DocumentSnapshot written with ID: ${documentReference.id}")
-            }.addOnFailureListener{ e ->
-                Log.w("teseror", "Error adding document", e)
-                Toast.makeText(this.requireContext(), "Failed add new user", Toast.LENGTH_SHORT).show()
-            }
+        checkEmailExists(email){ result ->
+                if (!result){
+                    Toast.makeText(
+                        this.requireContext(),
+                        "Email already exists",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+                else {
+                    val data = hashMapOf(
+                        "FullName" to fullName,
+                        "Alias" to "",
+                        "Email" to email,
+                        "Password" to password,
+                        "FromGoogle" to false,
+                        "Location" to location,
+                        "Gender" to gender,
+                        "City" to "",
+                        "Passions" to arrayOf<String>(),
+                        "Age" to 0,
+                        "Bio" to "",
+                        "Profile" to "",
+                        "Carousel" to arrayOf<String>()
+                    )
+
+                    db.collection("users").add(data).addOnSuccessListener { documentReference ->
+                        Log.d("add new user", "DocumentSnapshot written with ID: ${documentReference.id}")
+                    }.addOnFailureListener{ e ->
+                        Log.w("teseror", "Error adding document", e)
+                        Toast.makeText(this.requireContext(), "Failed add new user", Toast.LENGTH_SHORT).show()
+                    }
+                }
+
         }
-
     }
 
     override fun onCreateView(
