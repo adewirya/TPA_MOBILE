@@ -32,6 +32,8 @@ class MainActivity : AppCompatActivity() {
 
         val tabLayout = findViewById<TabLayout>(R.id.tabLayout)
         tabLayout.setupWithViewPager(viewPager)
+
+
 //        setContentView(R.layout.activity_main)
 
 //        var addUserBtn = binding.addUserbutton

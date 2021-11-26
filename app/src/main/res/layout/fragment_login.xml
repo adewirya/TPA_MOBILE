@@ -49,12 +49,39 @@
             android:backgroundTint="@color/MainColor"
             android:text="@string/login"
             android:textColor="@color/White"
-            app:cornerRadius="@android:dimen/app_icon_size"
+            app:cornerRadius="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/password"
             tools:ignore="MissingConstraints" />
+
+        <Button
+            android:id="@+id/loginGoogleBtn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:backgroundTint="@color/MainColor"
+            android:text="Login With Google"
+            android:textColor="@color/White"
+            app:cornerRadius="@android:dimen/app_icon_size"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView"
+            tools:ignore="MissingConstraints" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="OR"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/loginBtn" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

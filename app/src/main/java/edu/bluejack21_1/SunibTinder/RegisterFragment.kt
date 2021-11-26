@@ -41,7 +41,7 @@ class RegisterFragment : Fragment() {
     }
 
     private fun checkEmailExists(email: String, callback: (Boolean) -> Unit) {
-        db.collection("users").whereEqualTo("email",email).get().addOnSuccessListener {
+        db.collection("users").whereEqualTo("Email",email).get().addOnSuccessListener {
             doc ->
             if (doc.size() > 0){
                 callback(false)
@@ -105,11 +105,11 @@ class RegisterFragment : Fragment() {
                         "Location" to location,
                         "Gender" to gender,
                         "City" to "",
-                        "Passions" to arrayOf<String>(),
+                        "Passions" to listOf("bimbing"),
                         "Age" to 0,
                         "Bio" to "",
                         "Profile" to "",
-                        "Carousel" to arrayOf<String>()
+                        "Carousel" to listOf("bimbing")
                     )
 
                     db.collection("users").add(data).addOnSuccessListener { documentReference ->
