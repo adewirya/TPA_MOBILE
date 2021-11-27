@@ -89,7 +89,7 @@ class LoginFragment : Fragment() {
                     // redirect ke home
                         loadingCircle.dismiss()
                     activity?.let{
-                        val intent = Intent (it, AddPhotos::class.java)
+                        val intent = Intent (it, Home::class.java)
                         it.startActivity(intent)
                     }
 
@@ -177,6 +177,7 @@ class LoginFragment : Fragment() {
                     callback(false)
                 }
                 else {
+                    // get document id based on fields
                     for(i in e.documents){
                         sharedPref.putString("Uid", i.id)
                     }
@@ -282,7 +283,7 @@ class LoginFragment : Fragment() {
                         }
 
                         activity?.let{
-                            val intent = Intent (it, AddPhotos::class.java)
+                            val intent = Intent (it, Home::class.java)
                             it.startActivity(intent)
                         }
 
@@ -293,7 +294,7 @@ class LoginFragment : Fragment() {
                         sharedPref.putString("Email", personEmail)
                         sharedPref.putBoolean("IsGoogle",true)
                         activity?.let{
-                            val intent = Intent (it, AddPhotos::class.java)
+                            val intent = Intent (it, Home::class.java)
                             it.startActivity(intent)
                         }
 

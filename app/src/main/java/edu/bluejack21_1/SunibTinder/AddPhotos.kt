@@ -51,7 +51,7 @@ class AddPhotos : AppCompatActivity() {
         sharedPref = SharedPrefConfig(this)
 
 
-        var tes = 0
+
         listOfNum = mutableListOf<Int>()
         listOfUrl = mutableListOf<String>()
 
