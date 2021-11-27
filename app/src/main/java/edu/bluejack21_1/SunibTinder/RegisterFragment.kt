@@ -1,5 +1,9 @@
 package edu.bluejack21_1.SunibTinder
 
+import android.app.ProgressDialog
+import android.content.Context
+import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.BoringLayout
 import android.util.Log
@@ -7,10 +11,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.EditText
-import android.widget.Spinner
-import android.widget.Toast
+import android.widget.*
 import androidx.viewbinding.ViewBindings
 import com.google.firebase.firestore.core.ViewSnapshot
 import com.google.firebase.firestore.ktx.firestore
@@ -32,9 +33,11 @@ class RegisterFragment : Fragment() {
     private lateinit var spinner: Spinner
     private lateinit var spinner2 : Spinner
     val db = Firebase.firestore
+    private lateinit var loadingCircle : ProgressDialog
 
     private var v: FragmentRegisterBinding? = null
     private val binding get() = v!!
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,6 +70,7 @@ class RegisterFragment : Fragment() {
                 this.requireContext(), "All fields can't be empty",
                 Toast.LENGTH_SHORT
             ).show()
+            loadingCircle.dismiss()
             return
         }
         // valid email format
@@ -76,6 +80,7 @@ class RegisterFragment : Fragment() {
                 "Email must match the email format",
                 Toast.LENGTH_SHORT
             ).show()
+            loadingCircle.dismiss()
             return
         }
         else if(!password.contains(Regex("[^A-Za-z]")) || !password.contains(Regex("[A-Za-z]")) || !password.contains(Regex("[!\\\"#\$%&'()*+,-./:;\\\\\\\\<=>?@\\\\[\\\\]^_`{|}~]"))) {
@@ -84,6 +89,7 @@ class RegisterFragment : Fragment() {
                 "Password must contains at least letter, number, and special character",
                 Toast.LENGTH_SHORT
             ).show()
+            loadingCircle.dismiss()
             return
         }
 
@@ -94,6 +100,7 @@ class RegisterFragment : Fragment() {
                         "Email already exists",
                         Toast.LENGTH_SHORT
                     ).show()
+                    loadingCircle.dismiss()
                 }
                 else {
                     val data = hashMapOf(
@@ -105,19 +112,43 @@ class RegisterFragment : Fragment() {
                         "Location" to location,
                         "Gender" to gender,
                         "City" to "",
-                        "Passions" to listOf("bimbing"),
+                        "Passions" to listOf(""),
                         "Age" to 0,
                         "Bio" to "",
                         "Profile" to "",
-                        "Carousel" to listOf("bimbing")
+                        "Carousel" to listOf("")
                     )
+
+                    val sharedPref = SharedPrefConfig(this.requireContext())
 
                     db.collection("users").add(data).addOnSuccessListener { documentReference ->
                         Log.d("add new user", "DocumentSnapshot written with ID: ${documentReference.id}")
+                        Toast.makeText(
+                            this.requireContext(),
+                            "Registered Succesfully",
+                            Toast.LENGTH_SHORT
+                        ).show()
+
+                        sharedPref.putString("Uid", documentReference.id.toString())
+
                     }.addOnFailureListener{ e ->
                         Log.w("teseror", "Error adding document", e)
                         Toast.makeText(this.requireContext(), "Failed add new user", Toast.LENGTH_SHORT).show()
                     }
+
+                    sharedPref.putString("FullName", fullName)
+                    sharedPref.putString("Email", email)
+                    sharedPref.putBoolean("IsGoogle", false)
+                    sharedPref.putString("Password", password)
+                    sharedPref.putString("Location", location)
+                    sharedPref.putString("Gender", gender)
+
+                    loadingCircle.dismiss()
+                    activity?.let{
+                        val intent = Intent (it, AddPhotos::class.java)
+                        it.startActivity(intent)
+                    }
+
                 }
 
         }
@@ -132,6 +163,9 @@ class RegisterFragment : Fragment() {
 //        spinner = v.findViewById(R.id.locationSpinner)
         spinner = v!!.locationSpinner
         spinner2 = v!!.GenderSpinner
+
+        loadingCircle = ProgressDialog(this.requireContext())
+        loadingCircle.dismiss()
 
         ArrayAdapter.createFromResource(
             this.requireContext(),
@@ -154,6 +188,9 @@ class RegisterFragment : Fragment() {
 
         var registerBtn = binding.registerButton
         registerBtn.setOnClickListener {
+            loadingCircle.setIndeterminate(false)
+            loadingCircle.setCancelable(true)
+            loadingCircle.show()
             validateRegister()
         }
 

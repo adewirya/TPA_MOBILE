@@ -13,27 +13,6 @@ buildscript {
         // in the individual module build.gradle files
     }
 }
-// nih untuk login with google
-//allprojects {
-//    repositories {
-//        google()
-//
-//        // If you're using a version of Gradle lower than 4.1, you must instead use:
-//        // maven {
-//        //     url 'https://maven.google.com'
-//        // }
-//    }
-//}
-
-//allprojects {
-//
-//    repositories {
-//        // Check that you have the following line (if not, add it):
-//        google()  // Google's Maven repository
-//        mavenCentral()
-//
-//    }
-//}
 
 task clean(type: Delete) {
     delete rootProject.buildDir

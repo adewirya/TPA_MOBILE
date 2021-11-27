@@ -10,6 +10,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SunibTinder">
         <activity
+            android:name=".Home"
+            android:exported="true" />
+        <activity
+            android:name=".AddPhotos"
+            android:exported="true" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
