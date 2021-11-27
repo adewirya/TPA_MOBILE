@@ -139,8 +139,13 @@ class RegisterFragment : Fragment() {
 
                         loadingCircle.dismiss()
                         activity?.let{
-                            val intent = Intent (it, AddPhotos::class.java)
-                            it.startActivity(intent)
+
+                            if (sharedPref.getString("Uid") != ""){
+                                val intent = Intent (it, AddPhotos::class.java)
+                                it.startActivity(intent)
+                            } else {
+                                sharedPref.putString("Uid", documentReference.id.toString())
+                            }
                         }
 
                     }.addOnFailureListener{ e ->

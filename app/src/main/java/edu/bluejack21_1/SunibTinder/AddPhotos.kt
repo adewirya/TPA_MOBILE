@@ -59,6 +59,8 @@ class AddPhotos : AppCompatActivity() {
 
         userId = sharedPref.getString("Uid").toString()
 
+        Log.w("tesemail", userId);
+
         var doneBtn = findViewById<Button>(R.id.button)
 
         img1 = findViewById<ImageView>(R.id.imageView)
