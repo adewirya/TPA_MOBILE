@@ -63,6 +63,8 @@ class LoginFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         sharedPref = SharedPrefConfig(this.requireContext())
+        sharedPref.clearSharedPreference()
+
         // Inflate the layout for this fragment
         v = FragmentLoginBinding.inflate(inflater, container, false)
 
@@ -283,7 +285,7 @@ class LoginFragment : Fragment() {
                         }
 
                         activity?.let{
-                            val intent = Intent (it, Home::class.java)
+                            val intent = Intent (it, AddPhotos::class.java)
                             it.startActivity(intent)
                         }
 

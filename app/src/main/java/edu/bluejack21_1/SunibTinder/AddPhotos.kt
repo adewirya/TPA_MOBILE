@@ -55,12 +55,9 @@ class AddPhotos : AppCompatActivity() {
         listOfNum = mutableListOf<Int>()
         listOfUrl = mutableListOf<String>()
 
-//        binding = ActivityAddPhotosBinding.inflate(layoutInflater)
         setContentView(R.layout.activity_add_photos)
 
         userId = sharedPref.getString("Uid").toString()
-
-        Log.w("tesemail", userId)
 
         var doneBtn = findViewById<Button>(R.id.button)
 

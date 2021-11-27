@@ -130,25 +130,23 @@ class RegisterFragment : Fragment() {
                         ).show()
 
                         sharedPref.putString("Uid", documentReference.id.toString())
+                        sharedPref.putString("FullName", fullName)
+                        sharedPref.putString("Email", email)
+                        sharedPref.putBoolean("IsGoogle", false)
+                        sharedPref.putString("Password", password)
+                        sharedPref.putString("Location", location)
+                        sharedPref.putString("Gender", gender)
+
+                        loadingCircle.dismiss()
+                        activity?.let{
+                            val intent = Intent (it, AddPhotos::class.java)
+                            it.startActivity(intent)
+                        }
 
                     }.addOnFailureListener{ e ->
                         Log.w("teseror", "Error adding document", e)
                         Toast.makeText(this.requireContext(), "Failed add new user", Toast.LENGTH_SHORT).show()
                     }
-
-                    sharedPref.putString("FullName", fullName)
-                    sharedPref.putString("Email", email)
-                    sharedPref.putBoolean("IsGoogle", false)
-                    sharedPref.putString("Password", password)
-                    sharedPref.putString("Location", location)
-                    sharedPref.putString("Gender", gender)
-
-                    loadingCircle.dismiss()
-                    activity?.let{
-                        val intent = Intent (it, AddPhotos::class.java)
-                        it.startActivity(intent)
-                    }
-
                 }
 
         }
