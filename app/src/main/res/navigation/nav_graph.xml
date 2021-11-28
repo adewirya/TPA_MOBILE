@@ -4,16 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
     app:startDestination="@id/fragment_suggested">
-    <fragment
-        android:id="@+id/fragment_suggested"
-        android:name="edu.bluejack21_1.SunibTinder.fragment_suggested"
-        android:label="fragment_suggested"
-        tools:layout="@layout/fragment_suggested" />
+
     <fragment
         android:id="@+id/fragment_chat"
         android:name="edu.bluejack21_1.SunibTinder.fragment_chat"
         android:label="fragment_chat"
         tools:layout="@layout/fragment_chat" />
+    <fragment
+        android:id="@+id/fragment_suggested"
+        android:name="edu.bluejack21_1.SunibTinder.fragment_suggested"
+        android:label="fragment_suggested"
+        tools:layout="@layout/fragment_suggested" />
     <fragment
         android:id="@+id/fragment_profile"
         android:name="edu.bluejack21_1.SunibTinder.fragment_profile"
