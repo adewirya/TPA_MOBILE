@@ -10,14 +10,5 @@
         android:name="edu.bluejack21_1.SunibTinder.Home"
         android:label="activity_home"
         tools:layout="@layout/activity_home" />
-    <activity
-        android:id="@+id/chat"
-        android:name="edu.bluejack21_1.SunibTinder."
-        android:label="activity_chat"
-        tools:layout="@layout/activity_chat" />
-    <activity
-        android:id="@+id/chat"
-        android:name="edu.bluejack21_1.SunibTinder.Chat"
-        android:label="activity_chat"
-        tools:layout="@layout/activity_chat" />
+
 </navigation>
