@@ -62,6 +62,7 @@ class LoginFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         sharedPref = SharedPrefConfig(this.requireContext())
         sharedPref.clearSharedPreference()
 
@@ -113,11 +114,6 @@ class LoginFragment : Fragment() {
         // liat user udh sign in atau blom
         if(googleSignInAccount != null) {
             // buka home
-            Toast.makeText(
-                this.requireContext(),
-                "Google signed in",
-                Toast.LENGTH_SHORT
-            )
 
         }
 
@@ -146,18 +142,17 @@ class LoginFragment : Fragment() {
         db.collection("users").whereEqualTo("Email",email)
             .whereEqualTo("Password",password).get().addOnSuccessListener { e->
 
-//                Toast.makeText(
-//                    this.requireContext(),
-//                    e.size().toString(),
-//                    Toast.LENGTH_SHORT).show()
-
-
                 if (e.size() <= 0){
                     callback(false)
                 }
                 else {
-                    callback(true)
+
+                    for (i in e){
+                        sharedPref.putString("Uid", i.id)
+                    }
                 }
+
+                callback(true)
             }.addOnFailureListener{ e ->
                 Toast.makeText(
                     this.requireContext(),
@@ -274,19 +269,18 @@ class LoginFragment : Fragment() {
                         sharedPref.putString("Email", personEmail)
                         sharedPref.putBoolean("IsGoogle",true)
 
-                        db.collection("users").add(data).addOnSuccessListener { documentReference ->
-                            Log.d("add new user", "DocumentSnapshot written with ID: ${documentReference.id}")
-                            sharedPref.putString("Uid", documentReference.id)
-
+                        db.collection("users").add(data).addOnSuccessListener { e ->
+                            sharedPref.putString("Uid", e.id)
                             Toast.makeText(this.requireContext(), "User Added Succesfully", Toast.LENGTH_SHORT).show()
+
+
+                            activity?.let{
+                                val intent = Intent (it, AddPhotos::class.java)
+                                it.startActivity(intent)
+                            }
                         }.addOnFailureListener{ e ->
                             Log.w("teseror", "Error adding document", e)
                             Toast.makeText(this.requireContext(), "Failed add new user", Toast.LENGTH_SHORT).show()
-                        }
-
-                        activity?.let{
-                            val intent = Intent (it, AddPhotos::class.java)
-                            it.startActivity(intent)
                         }
 
 

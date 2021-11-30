@@ -59,19 +59,14 @@ class AddPhotos : AppCompatActivity() {
 
         userId = sharedPref.getString("Uid").toString()
 
-        Log.w("tesemail", userId);
+        Log.w("emailtest", userId);
 
-        var doneBtn = findViewById<Button>(R.id.button)
+        val doneBtn = findViewById<Button>(R.id.button)
 
         img1 = findViewById<ImageView>(R.id.imageView)
         img2 = findViewById<ImageView>(R.id.imageView2)
-        img3 = findViewById<ImageView>(R.id.imageView4)
-        img4 = findViewById<ImageView>(R.id.imageView3)
-
-        val btnImg1 = findViewById<Button>(R.id.buttonImg1)
-        val btnImg2 = findViewById<Button>(R.id.buttonImg2)
-        val btnImg3 = findViewById<Button>(R.id.buttonImg3)
-        val btnImg4 = findViewById<Button>(R.id.buttonImg4)
+        img3 = findViewById<ImageView>(R.id.imageView3)
+        img4 = findViewById<ImageView>(R.id.imageView4)
 
 
         storage = FirebaseStorage.getInstance()
@@ -100,11 +95,13 @@ class AddPhotos : AppCompatActivity() {
                                                 if (e4){
 
                                                     // update data in database
+                                                    val data = hashMapOf(
+                                                        "Carousel" to listOfUrl,
+                                                        "Profile" to listOfUrl[0]
+                                                        )
 
-                                                    val ref = db.collection("users").document(userId)
-
-                                                    ref.update("Carousel", listOfUrl).addOnSuccessListener { e->
-                                                        Toast.makeText(this@AddPhotos, "Profile updated succesfully", Toast.LENGTH_SHORT).show()
+                                                    db.collection("users").document(userId).set(data).addOnSuccessListener { e->
+//                                                        Toast.makeText(this@AddPhotos, "Profile updated succesfully", Toast.LENGTH_SHORT).show()
                                                         startActivity(Intent(this, Home::class.java))
                                                     }.addOnFailureListener{
                                                             e->
@@ -124,26 +121,46 @@ class AddPhotos : AppCompatActivity() {
             }
         }
 
-        btnImg1.setOnClickListener{
-//            Toast.makeText(this@AddPhotos, "clicked", Toast.LENGTH_SHORT).show()
-//            btnImg1.setText("asdksdks")
+        img1.setOnClickListener{
+
             choosePicture(1)
         }
 
-        btnImg2.setOnClickListener{
-//            Toast.makeText(this@AddPhotos, "clicked2", Toast.LENGTH_SHORT).show()
+        img2.setOnClickListener{
 
-            choosePicture(2)
+            if (!bol1){
+                choosePicture(1)
+            }
+            else {
+                choosePicture(2)
+            }
         }
 
-        btnImg3.setOnClickListener{
-//            Toast.makeText(this@AddPhotos, "clicked3", Toast.LENGTH_SHORT).show()
-            choosePicture(4)
+        img3.setOnClickListener{
+            if (!bol1){
+                choosePicture(1)
+            }
+            else if (!bol2) {
+                choosePicture(2)
+            } else {
+                choosePicture(3)
+            }
         }
 
-        btnImg4.setOnClickListener{
-//            Toast.makeText(this@AddPhotos, "clicked4", Toast.LENGTH_SHORT).show()
-            choosePicture(3)
+        img4.setOnClickListener{
+            if (!bol1){
+                choosePicture(1)
+            }
+            else if (!bol2) {
+                choosePicture(2)
+            }
+            else if (!bol3){
+                choosePicture(3)
+            }
+            else {
+                choosePicture(4)
+            }
+
         }
 
 //        Toast.makeText(this@AddPhotos, "onclick listener ada", Toast.LENGTH_SHORT).show()
@@ -181,6 +198,7 @@ class AddPhotos : AppCompatActivity() {
             img3.setImageURI(imageUrl3)
             uploaded += 1
             bol3 = true
+//            Toast.makeText(this@AddPhotos, "masuk", Toast.LENGTH_SHORT).show()
             listOfNum.add(3)
         }
 
@@ -223,7 +241,7 @@ class AddPhotos : AppCompatActivity() {
         }.addOnProgressListener {
             e->
 
-            val progress = ((100.00*e.bytesTransferred) / (e.totalByteCount))
+            val progress = ((100*e.bytesTransferred) / (e.totalByteCount))
             pd.setMessage("Percentage : $progress%")
 
             if (progress.toInt() == 100){
