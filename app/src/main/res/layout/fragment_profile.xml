@@ -27,14 +27,12 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="1.0">
 
-
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 app:cardCornerRadius="70dp"
-                app:cardPreventCornerOverlap="false"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
@@ -43,7 +41,9 @@
                     android:id="@+id/imageView5"
                     android:layout_width="140dp"
                     android:layout_height="140dp"
-                    tools:src="@tools:sample/avatars" />
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_baseline_local_fire_department_24"
+                    />
             </androidx.cardview.widget.CardView>
 
             <androidx.appcompat.widget.LinearLayoutCompat

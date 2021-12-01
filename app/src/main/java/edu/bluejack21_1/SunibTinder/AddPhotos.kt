@@ -100,7 +100,7 @@ class AddPhotos : AppCompatActivity() {
                                                         "Profile" to listOfUrl[0]
                                                         )
 
-                                                    db.collection("users").document(userId).set(data).addOnSuccessListener { e->
+                                                    db.collection("users").document(userId).update(data).addOnSuccessListener { e->
 //                                                        Toast.makeText(this@AddPhotos, "Profile updated succesfully", Toast.LENGTH_SHORT).show()
                                                         startActivity(Intent(this, Home::class.java))
                                                     }.addOnFailureListener{

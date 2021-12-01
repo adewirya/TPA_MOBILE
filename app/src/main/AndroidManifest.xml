@@ -10,6 +10,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SunibTinder">
         <activity
+            android:name=".EditInfo"
+            android:exported="true" />
+        <activity
+            android:name=".Settings"
+            android:exported="true" />
+        <activity
             android:name=".activity_chat"
             android:exported="false" />
         <activity

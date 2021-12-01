@@ -261,7 +261,7 @@ class LoginFragment : Fragment() {
                             "Passions" to listOf(""),
                             "Age" to 0,
                             "Bio" to "",
-                            "Profile" to personPhoto.toString(),
+                            "Profile" to "",
                             "Carousel" to listOf("")
                         )
 
@@ -270,19 +270,18 @@ class LoginFragment : Fragment() {
                         sharedPref.putBoolean("IsGoogle",true)
 
                         db.collection("users").add(data).addOnSuccessListener { e ->
+                            Toast.makeText(this.requireContext(), "User " + e.id, Toast.LENGTH_SHORT).show()
                             sharedPref.putString("Uid", e.id)
-                            Toast.makeText(this.requireContext(), "User Added Succesfully", Toast.LENGTH_SHORT).show()
 
-
+                        }.addOnFailureListener{ e ->
+                            Log.w("teseror", "Error adding document", e)
+                            Toast.makeText(this.requireContext(), "Failed add new user", Toast.LENGTH_SHORT).show()
+                        }.addOnCompleteListener{
                             activity?.let{
                                 val intent = Intent (it, AddPhotos::class.java)
                                 it.startActivity(intent)
                             }
-                        }.addOnFailureListener{ e ->
-                            Log.w("teseror", "Error adding document", e)
-                            Toast.makeText(this.requireContext(), "Failed add new user", Toast.LENGTH_SHORT).show()
                         }
-
 
                     }else{
                         // redirect.
