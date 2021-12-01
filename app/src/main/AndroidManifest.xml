@@ -10,6 +10,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SunibTinder">
         <activity
+            android:name=".EditPassword"
+            android:exported="true" />
+        <activity
+            android:name=".EditEmail"
+            android:exported="true" />
+        <activity
+            android:name=".EditSuggestion"
+            android:exported="true" />
+        <activity
             android:name=".EditInfo"
             android:exported="true" />
         <activity

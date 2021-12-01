@@ -10,14 +10,19 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import com.squareup.picasso.Picasso
 import edu.bluejack21_1.SunibTinder.databinding.FragmentLoginBinding
 import edu.bluejack21_1.SunibTinder.databinding.FragmentProfileBinding
 import java.net.URI
+import java.util.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -33,14 +38,22 @@ class fragment_profile : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+    private lateinit var imageUri : Uri
+
+    private lateinit var imageView : ImageView
+
 
     val db = Firebase.firestore
     private lateinit var loadingCircle : ProgressDialog
+
+    private lateinit var docId : String
 
     private var v: FragmentProfileBinding? = null
     private val binding get() = v!!
     private lateinit var sharedPref : SharedPrefConfig
 
+    private lateinit var storage : FirebaseStorage
+    private lateinit var storageRef : StorageReference
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,14 +71,16 @@ class fragment_profile : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         sharedPref = SharedPrefConfig(this.requireContext())
-        val docId = sharedPref.getString("Uid").toString()
+        docId = sharedPref.getString("Uid").toString()
 
         // Inflate the layout for this fragment
         v = FragmentProfileBinding.inflate(inflater, container, false)
 
-        val imageView = binding.imageView5
+        imageView = binding.imageView5
 
-//        imageView.setImageURI(Uri.parse("https://lh3.googleusercontent.com/a-/AOh14GiNJNRukVh2-pNdmr70A_40Q5mJNlXv7QqjfLVw"))
+        storage = FirebaseStorage.getInstance()
+        storageRef = storage.getReference()
+
         var imageUrl : Uri
 
 
@@ -74,7 +89,7 @@ class fragment_profile : Fragment() {
             e ->
             imageUrl = Uri.parse(e["Profile"].toString())
             Picasso.with(this.requireContext()).load(imageUrl).into(imageView)
-            binding.textView2.setText(e["FullName"].toString())
+            binding.textView2.setText(e["FullName"].toString() + ", ")
             binding.userAge.setText(e["Age"].toString())
 
             if (e["Location"].toString() == ""){
@@ -95,9 +110,7 @@ class fragment_profile : Fragment() {
         }
 
         imageView.setOnClickListener{
-            Toast.makeText(this.requireContext(), "KECLICK", Toast.LENGTH_SHORT).show()
-            imageView.setImageURI(Uri.parse("https://firebasestorage.googleapis.com/v0/b/sunibtinder-eb42f.appspot.com/o/images%2Ffac3ec74-6d18-44b6-81bc-3438b4fe0fde?alt=media&token=e62a8bc3-ab3e-4aff-a25d-2aef30bd543d"))
-
+            choosePicture(1)
         }
 
         binding.editBtn.setOnClickListener{
@@ -116,6 +129,53 @@ class fragment_profile : Fragment() {
 
 
         return v!!.root
+    }
+
+    private fun choosePicture(RequestCode: Int) {
+        val intent = Intent()
+        intent.setType("image/*")
+        intent.setAction(Intent.ACTION_GET_CONTENT)
+        startActivityForResult(intent, RequestCode)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, datas: Intent?) {
+        if (requestCode == 1 && resultCode == AppCompatActivity.RESULT_OK && datas != null && datas.data != null) {
+            imageUri = datas.data!!
+            imageView.setImageURI(imageUri)
+            updateAndUpload()
+        }
+    }
+
+    private fun updateAndUpload() {
+        val pd = ProgressDialog(this.requireContext())
+        pd.setTitle("Updating Image ")
+        pd.show()
+
+        val randomId = UUID.randomUUID().toString()
+
+        val storageReference = storageRef.child("images/" + randomId)
+
+        storageReference.putFile(imageUri).addOnSuccessListener { e->
+            Toast.makeText(this.requireContext(), "Image Updated Succesfully", Toast.LENGTH_SHORT)
+
+        }.addOnProgressListener {
+                e->
+
+            val progress = ((100*e.bytesTransferred) / (e.totalByteCount))
+            pd.setMessage("Percentage : $progress%")
+
+            if (progress.toInt() == 100){
+
+
+                storageReference.downloadUrl.addOnSuccessListener { e->
+                    db.collection("users").document(docId).update("Profile", e.toString())
+                }
+
+                pd.dismiss()
+            }
+        }
+
+
     }
 
     companion object {
