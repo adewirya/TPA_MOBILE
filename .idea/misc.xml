@@ -5,16 +5,18 @@
       <map>
         <entry key="..\:/Users/62822/Documents/Asslab/TPA/TPA_Mobile/app/src/main/res/drawable/ic_launcher_background.xml" value="0.2703125" />
         <entry key="..\:/Users/62822/Documents/Asslab/TPA/TPA_Mobile/app/src/main/res/layout/activity_add_photos.xml" value="0.264" />
-        <entry key="..\:/Users/62822/Documents/Asslab/TPA/TPA_Mobile/app/src/main/res/layout/activity_edit_email.xml" value="0.11614583333333334" />
+        <entry key="..\:/Users/62822/Documents/Asslab/TPA/TPA_Mobile/app/src/main/res/layout/activity_edit_email.xml" value="0.264" />
         <entry key="..\:/Users/62822/Documents/Asslab/TPA/TPA_Mobile/app/src/main/res/layout/activity_edit_info.xml" value="0.17753623188405798" />
-        <entry key="..\:/Users/62822/Documents/Asslab/TPA/TPA_Mobile/app/src/main/res/layout/activity_edit_password.xml" value="0.11614583333333334" />
-        <entry key="..\:/Users/62822/Documents/Asslab/TPA/TPA_Mobile/app/src/main/res/layout/activity_edit_suggestion.xml" value="0.11614583333333334" />
+        <entry key="..\:/Users/62822/Documents/Asslab/TPA/TPA_Mobile/app/src/main/res/layout/activity_edit_password.xml" value="0.264" />
+        <entry key="..\:/Users/62822/Documents/Asslab/TPA/TPA_Mobile/app/src/main/res/layout/activity_edit_suggestion.xml" value="0.264" />
         <entry key="..\:/Users/62822/Documents/Asslab/TPA/TPA_Mobile/app/src/main/res/layout/activity_home.xml" value="0.24094202898550723" />
-        <entry key="..\:/Users/62822/Documents/Asslab/TPA/TPA_Mobile/app/src/main/res/layout/activity_main.xml" value="0.13020833333333334" />
-        <entry key="..\:/Users/62822/Documents/Asslab/TPA/TPA_Mobile/app/src/main/res/layout/activity_settings.xml" value="0.4" />
+        <entry key="..\:/Users/62822/Documents/Asslab/TPA/TPA_Mobile/app/src/main/res/layout/activity_main.xml" value="0.264" />
+        <entry key="..\:/Users/62822/Documents/Asslab/TPA/TPA_Mobile/app/src/main/res/layout/activity_settings.xml" value="0.176" />
+        <entry key="..\:/Users/62822/Documents/Asslab/TPA/TPA_Mobile/app/src/main/res/layout/fragment_chat.xml" value="0.18432971014492755" />
         <entry key="..\:/Users/62822/Documents/Asslab/TPA/TPA_Mobile/app/src/main/res/layout/fragment_login.xml" value="0.264" />
-        <entry key="..\:/Users/62822/Documents/Asslab/TPA/TPA_Mobile/app/src/main/res/layout/fragment_profile.xml" value="0.4522706209453197" />
+        <entry key="..\:/Users/62822/Documents/Asslab/TPA/TPA_Mobile/app/src/main/res/layout/fragment_profile.xml" value="0.4" />
         <entry key="..\:/Users/62822/Documents/Asslab/TPA/TPA_Mobile/app/src/main/res/layout/fragment_register.xml" value="0.264" />
+        <entry key="..\:/Users/62822/Documents/Asslab/TPA/TPA_Mobile/app/src/main/res/layout/fragment_suggested.xml" value="0.264" />
         <entry key="..\:/Users/62822/Documents/Asslab/TPA/TPA_Mobile/app/src/main/res/layout/login_page.xml" value="0.264" />
         <entry key="..\:/Users/62822/Documents/Asslab/TPA/TPA_Mobile/app/src/main/res/layout/tes_figma.xml" value="0.13020833333333334" />
         <entry key="..\:/Users/maver/Desktop/bimbing/TPA_MOBILE/app/src/main/res/drawable/shape.xml" value="0.2755208333333333" />

@@ -262,12 +262,14 @@ class LoginFragment : Fragment() {
                             "Age" to 0,
                             "Bio" to "",
                             "Profile" to "",
-                            "Carousel" to listOf("")
+                            "Carousel" to listOf(""),
+                            "Preferences" to "Same Campus"
                         )
 
                         sharedPref.putString("FullName", personName)
                         sharedPref.putString("Email", personEmail)
                         sharedPref.putBoolean("IsGoogle",true)
+                        sharedPref.putString("Preferences", "Same Campus")
 
                         db.collection("users").add(data).addOnSuccessListener { e ->
                             Toast.makeText(this.requireContext(), "User " + e.id, Toast.LENGTH_SHORT).show()

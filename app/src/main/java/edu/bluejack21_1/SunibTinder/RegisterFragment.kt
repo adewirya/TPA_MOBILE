@@ -116,7 +116,8 @@ class RegisterFragment : Fragment() {
                         "Age" to 0,
                         "Bio" to "",
                         "Profile" to "",
-                        "Carousel" to listOf("")
+                        "Carousel" to listOf(""),
+                        "Preferences" to "Same Campus"
                     )
 
                     val sharedPref = SharedPrefConfig(this.requireContext())
@@ -136,6 +137,7 @@ class RegisterFragment : Fragment() {
                         sharedPref.putString("Password", password)
                         sharedPref.putString("Location", location)
                         sharedPref.putString("Gender", gender)
+                        sharedPref.putString("Preferences", "Same Campus")
 
                         loadingCircle.dismiss()
                         activity?.let{
