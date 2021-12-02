@@ -3,8 +3,12 @@ package edu.bluejack21_1.SunibTinder
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
+import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.fragment.app.FragmentManager
+import kotlinx.coroutines.internal.artificialFrame
 
 class Settings : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -14,6 +18,22 @@ class Settings : AppCompatActivity() {
         val btnSuggest = findViewById<TextView>(R.id.textView6)
         val btnPassword = findViewById<TextView>(R.id.textView4)
         val btnEmail = findViewById<TextView>(R.id.textView9)
+        val logoutBtn = findViewById<TextView>(R.id.logout)
+
+        val sharedPref = SharedPrefConfig(this)
+
+        if (sharedPref.getBoolean("IsGoogle") == true){
+            btnPassword.visibility = View.INVISIBLE
+            btnEmail.visibility = View.INVISIBLE
+        }
+
+        logoutBtn.setOnClickListener{
+            sharedPref.clearSharedPreference()
+
+            val transaction = supportFragmentManager.beginTransaction()
+            val fragment = LoginFragment.newInstance()
+            transaction.replace(R.id.container, fragment).commit()
+        }
 
         btnEmail.setOnClickListener{
             startActivity(Intent(this, EditEmail::class.java))

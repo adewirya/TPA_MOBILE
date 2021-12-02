@@ -117,10 +117,14 @@ class RegisterFragment : Fragment() {
                         "Bio" to "",
                         "Profile" to "",
                         "Carousel" to listOf(""),
-                        "Preferences" to "Same Campus"
+                        "Preferences" to "Same Campus",
+                        "Min Age" to 0,
+                        "Max Age" to 100
                     )
 
                     val sharedPref = SharedPrefConfig(this.requireContext())
+                    sharedPref.putInt("MinAge", 0)
+                    sharedPref.putInt("MaxAge", 100)
 
                     db.collection("users").add(data).addOnSuccessListener { documentReference ->
                         Log.d("add new user", "DocumentSnapshot written with ID: ${documentReference.id}")
