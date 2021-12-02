@@ -95,12 +95,12 @@ class LoginFragment : Fragment() {
                         val intent = Intent (it, Home::class.java)
                         it.startActivity(intent)
                     }
-
                 }
+
             }
         }
 
-        var loginGoogleBtn = binding.loginGoogleBtn
+        val loginGoogleBtn = binding.loginGoogleBtn
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestEmail()
@@ -108,7 +108,7 @@ class LoginFragment : Fragment() {
 
         val googleSignInClient = GoogleSignIn.getClient(this.activity, gso);
 
-        val googleSignInAccount = GoogleSignIn.getLastSignedInAccount(this.activity)
+        val googleSignInAccount = GoogleSignIn.getLastSignedInAccount(this.requireContext())
 
 
         // liat user udh sign in atau blom
@@ -135,8 +135,8 @@ class LoginFragment : Fragment() {
     private fun checkExistsUser(callback: (Boolean) -> Unit){
 
 
-        var email = binding.email.text.toString()
-        var password = binding.password.text.toString()
+        val email = binding.email.text.toString()
+        val password = binding.password.text.toString()
 
 
         db.collection("users").whereEqualTo("Email",email)
@@ -150,6 +150,10 @@ class LoginFragment : Fragment() {
                     for (i in e){
                         sharedPref.putString("Uid", i.id)
                     }
+                    sharedPref.putBoolean("IsGoogle", false)
+                    sharedPref.putString("Email", email)
+                    sharedPref.putString("Password", password)
+
                 }
 
                 callback(true)
@@ -203,11 +207,10 @@ class LoginFragment : Fragment() {
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
+        fun newInstance() =
             LoginFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+
                 }
             }
     }
@@ -263,9 +266,14 @@ class LoginFragment : Fragment() {
                             "Bio" to "",
                             "Profile" to "",
                             "Carousel" to listOf(""),
-                            "Preferences" to "Same Campus"
+                            "Preferences" to "Same Campus",
+                            "Min Age" to 0,
+                            "Max Age" to 100
                         )
 
+
+                        sharedPref.putInt("MinAge", 0)
+                        sharedPref.putInt("MaxAge", 100)
                         sharedPref.putString("FullName", personName)
                         sharedPref.putString("Email", personEmail)
                         sharedPref.putBoolean("IsGoogle",true)
@@ -287,6 +295,8 @@ class LoginFragment : Fragment() {
 
                     }else{
                         // redirect.
+                        sharedPref.putInt("MinAge", 0)
+                        sharedPref.putInt("MaxAge", 100)
                         sharedPref.putString("FullName", personName)
                         sharedPref.putString("Email", personEmail)
                         sharedPref.putBoolean("IsGoogle",true)
