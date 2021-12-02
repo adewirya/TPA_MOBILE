@@ -29,4 +29,15 @@
             Female
         </item>
     </string-array>
+
+    <string-array name="preferences">
+        <item>
+            Same Campus
+        </item>
+        <item>
+            Inter Campus
+        </item>
+    </string-array>
+
+
 </resources>
