@@ -79,8 +79,8 @@ class LoginFragment : Fragment() {
             loadingCircle.setCancelable(true)
             loadingCircle.show()
             checkExistsUser {
-                e->
-                if (!e){
+                sse->
+                if (!sse){
                     Toast.makeText(
                         this.requireContext(),
                         "Wrong email / password",
@@ -91,9 +91,12 @@ class LoginFragment : Fragment() {
                 else {
                     // redirect ke home
                         loadingCircle.dismiss()
-                    activity?.let{
-                        val intent = Intent (it, Home::class.java)
-                        it.startActivity(intent)
+                    Toast.makeText(this.requireContext(), "suk $sse",  Toast.LENGTH_SHORT).show()
+                    if (sse){
+                        activity?.let{
+                            val intent = Intent (it, Home::class.java)
+                            it.startActivity(intent)
+                        }
                     }
                 }
 
@@ -154,9 +157,10 @@ class LoginFragment : Fragment() {
                     sharedPref.putString("Email", email)
                     sharedPref.putString("Password", password)
 
+                    callback(true)
                 }
 
-                callback(true)
+
             }.addOnFailureListener{ e ->
                 Toast.makeText(
                     this.requireContext(),
@@ -287,6 +291,7 @@ class LoginFragment : Fragment() {
                             Log.w("teseror", "Error adding document", e)
                             Toast.makeText(this.requireContext(), "Failed add new user", Toast.LENGTH_SHORT).show()
                         }.addOnCompleteListener{
+
                             activity?.let{
                                 val intent = Intent (it, AddPhotos::class.java)
                                 it.startActivity(intent)
@@ -294,6 +299,7 @@ class LoginFragment : Fragment() {
                         }
 
                     }else{
+
                         // redirect.
                         sharedPref.putInt("MinAge", 0)
                         sharedPref.putInt("MaxAge", 100)
