@@ -91,7 +91,6 @@ class LoginFragment : Fragment() {
                 else {
                     // redirect ke home
                         loadingCircle.dismiss()
-                    Toast.makeText(this.requireContext(), "suk $sse",  Toast.LENGTH_SHORT).show()
                     if (sse){
                         activity?.let{
                             val intent = Intent (it, Home::class.java)

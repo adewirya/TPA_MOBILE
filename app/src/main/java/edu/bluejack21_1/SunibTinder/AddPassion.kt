@@ -11,6 +11,8 @@ import android.widget.LinearLayout
 import androidx.core.view.marginTop
 import android.R.attr.button
 import android.widget.Toast
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
 
 class AddPassion : AppCompatActivity() {
@@ -36,8 +38,6 @@ class AddPassion : AppCompatActivity() {
 
         for(p in passionList){
             val btn : Button = Button(this)
-
-
 
             btn.setText(p.toString())
             btn.id = index
@@ -79,9 +79,19 @@ class AddPassion : AppCompatActivity() {
                 index++
             }
             selected = selected.dropLast(1)
-            Toast.makeText(this, selected, Toast.LENGTH_SHORT).show()
-            sharedPref.putString("passion", selected)
-            finish()
+//            Toast.makeText(this, selected, Toast.LENGTH_SHORT).show()
+            sharedPref.putString("Passion", selected)
+
+            val docId = sharedPref.getString("Uid").toString()
+            val db  = Firebase.firestore
+
+            db.collection("users").document(docId).update("Passion", selected).addOnSuccessListener {
+                e->
+                    Toast.makeText(this@AddPassion, "Passion added succesfully", Toast.LENGTH_SHORT).show()
+            }.addOnCompleteListener{
+                finish()
+            }
+
         }
 
     }

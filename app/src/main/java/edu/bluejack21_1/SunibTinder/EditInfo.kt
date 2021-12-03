@@ -1,6 +1,9 @@
 package edu.bluejack21_1.SunibTinder
 
+import android.app.ProgressDialog
 import android.content.Intent
+import android.media.Image
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -8,14 +11,19 @@ import android.widget.*
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
+import com.squareup.picasso.Picasso
 import org.w3c.dom.Text
 import java.util.*
 import kotlin.collections.ArrayList
 
-class EditInfo : AppCompatActivity() {
+class   EditInfo : AppCompatActivity() {
 
 
     val db = Firebase.firestore
+    private lateinit var storage : FirebaseStorage
+    private lateinit var storageRef : StorageReference
     private lateinit var uId : String
     private lateinit var sharedPref : SharedPrefConfig
     private lateinit var genderSpinner : Spinner
@@ -29,9 +37,31 @@ class EditInfo : AppCompatActivity() {
     private lateinit var doneBtn2 : Button
     private lateinit var addPassionBtn : Button
     private lateinit var passionTextView : TextView
+    private lateinit var img1 : ImageView
+    private lateinit var img2 : ImageView
+    private lateinit var img3 : ImageView
+    private lateinit var img4 : ImageView
+
+    private var bol1 : Boolean = false
+    private var bol2 : Boolean = false
+    private var bol3 : Boolean = false
+    private var bol4 : Boolean = false
+    private lateinit var imageUrl1 : Uri
+    private lateinit var imageUrl2 : Uri
+    private lateinit var imageUrl3 : Uri
+    private lateinit var imageUrl4 : Uri
+    private lateinit var listOfUrl : MutableList<String>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_info)
+
+        storage = FirebaseStorage.getInstance()
+        storageRef = storage.getReference()
+
+        listOfUrl = mutableListOf<String>()
+
+
         sharedPref = SharedPrefConfig(this)
         genderSpinner = findViewById<Spinner>(R.id.genderSpinner)
         locationSpinner = findViewById<Spinner>(R.id.locationSpinner)
@@ -44,6 +74,10 @@ class EditInfo : AppCompatActivity() {
         doneBtn = findViewById<Button>(R.id.doneEditBtn)
         doneBtn2 = findViewById<Button>(R.id.doneInfoBtn)
         addPassionBtn = findViewById<Button>(R.id.addPassionBtn)
+        img1 = findViewById<ImageView>(R.id.imageView)
+        img2 = findViewById<ImageView>(R.id.imageView2)
+        img3 = findViewById<ImageView>(R.id.imageView3)
+        img4 = findViewById<ImageView>(R.id.imageView4)
 
         uId = sharedPref.getString("Uid").toString()
 
@@ -56,6 +90,23 @@ class EditInfo : AppCompatActivity() {
         ).also { adapter2 ->
             adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             genderSpinner.adapter = adapter2
+        }
+
+        img1.setOnClickListener{
+            choosePicture(1)
+        }
+
+        img2.setOnClickListener{
+            choosePicture(2)
+        }
+
+        img3.setOnClickListener{
+            choosePicture(3)
+        }
+
+        img4.setOnClickListener{
+            choosePicture(4)
+
         }
 
         ArrayAdapter.createFromResource(
@@ -76,6 +127,91 @@ class EditInfo : AppCompatActivity() {
             startActivity(Intent(this, AddPassion::class.java))
         }
     }
+
+    private fun choosePicture(RequestCode : Int) {
+        val intent = Intent()
+        intent.setType("image/*")
+        intent.setAction(Intent.ACTION_GET_CONTENT)
+        startActivityForResult(intent, RequestCode)
+
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, datas: Intent?) {
+        super.onActivityResult(requestCode, resultCode, datas)
+
+        if (requestCode == 1 && resultCode == RESULT_OK && datas != null && datas.data != null) {
+            imageUrl1 = datas.data!!
+            img1.setImageURI(imageUrl1)
+            bol1 = true
+            uploadPicture(1)
+        }
+
+        else if (requestCode == 2 && resultCode == RESULT_OK && datas != null && datas.data != null) {
+            imageUrl2 = datas.data!!
+            img2.setImageURI(imageUrl2)
+            bol2 = true
+            uploadPicture(2)
+        }
+
+        else if (requestCode == 3 && resultCode == RESULT_OK && datas != null && datas.data != null) {
+            imageUrl3 = datas.data!!
+            img3.setImageURI(imageUrl3)
+            bol3 = true
+            uploadPicture(3)
+        }
+
+        else if (requestCode == 4 && resultCode == RESULT_OK && datas != null && datas.data != null) {
+            imageUrl4 = datas.data!!
+            img4.setImageURI(imageUrl4)
+            bol4 = true
+            uploadPicture(4)
+        }
+
+    }
+
+    private fun uploadPicture(Que : Int) {
+
+        val pd = ProgressDialog(this)
+        pd.setTitle("Uploading Image "+ Que)
+        pd.show()
+
+        var url : Uri
+        url = Uri.EMPTY
+
+        if (Que == 1){
+            url = imageUrl1
+        } else if (Que == 2){
+            url = imageUrl2
+        } else if (Que == 3 ){
+            url = imageUrl3
+        } else{
+            url = imageUrl4
+        }
+
+        val idx : Int = Que-1
+
+        val randomId = UUID.randomUUID().toString()
+
+        val storageReference = storageRef.child("images/" + randomId)
+
+        storageReference.putFile(url).addOnSuccessListener { e->
+            Toast.makeText( this@EditInfo, "Picture Uploaded Succesfully", Toast.LENGTH_SHORT).show()
+
+        }.addOnProgressListener {
+                e->
+
+            val progress = ((100*e.bytesTransferred) / (e.totalByteCount))
+            pd.setMessage("Percentage : $progress%")
+
+            if (progress.toInt() == 100){
+                storageReference.downloadUrl.addOnSuccessListener { e->
+                    listOfUrl[idx] = e.toString()
+                    pd.dismiss()
+                }
+            }
+        }
+    }
+
     private fun setDefaultValues(){
         db.collection("users").document(uId).get().addOnSuccessListener { e ->
             nameTxtField.setText(e["FullName"].toString())
@@ -85,20 +221,37 @@ class EditInfo : AppCompatActivity() {
             livingInTxtField.setText(e["City"].toString())
             genderSpinner.setSelection(getGenderIndex(e["Gender"].toString()))
             locationSpinner.setSelection(getCampusLocationIndex(e["Location"].toString()))
-            val passions : List<String> = e["Passion"] as List<String>
-            var passionStr = ""
-            for(p in passions){
-                passionStr += p + ","
+
+            var passions : List<String>
+
+            if (e["Passion"] != null){
+                passions = e["Passion"] as List<String>
+                var passionStr = ""
+                for(p in passions){
+                    passionStr += p + ","
+                }
+                passionStr = passionStr.dropLast(1)
+                sharedPref.putString("Passion", passionStr)
+                passionTextView.setText(passionStr)
             }
-            passionStr = passionStr.dropLast(1)
-            sharedPref.putString("passion", passionStr)
-            passionTextView.setText(passionStr)
+
+            val picts : List<String> = e["Carousel"] as List<String>
+
+            for (i in picts){
+                listOfUrl.add(i)
+            }
+
+            Picasso.get().load(picts[0]).into(img1)
+            Picasso.get().load(picts[1]).into(img2)
+            Picasso.get().load(picts[2]).into(img3)
+            Picasso.get().load(picts[3]).into(img4)
+
         }
     }
 
     override fun onResume() {
         super.onResume()
-        passionTextView.setText(sharedPref.getString("passion").toString())
+        passionTextView.setText(sharedPref.getString("Passion").toString())
     }
 
     private fun getGenderIndex(gender : String) : Int{
@@ -155,10 +308,11 @@ class EditInfo : AppCompatActivity() {
             return
         }
 
-        var passionPref = sharedPref.getString("passion").toString()
+        val passionPref = sharedPref.getString("Passion").toString()
         val passions = passionPref.split(",")
 
-        db.collection("users").document(uId).update(mapOf(
+        // update data in database
+        val data = hashMapOf(
             "FullName" to fullName,
             "Alias" to  alias,
             "Bio" to bio,
@@ -166,12 +320,22 @@ class EditInfo : AppCompatActivity() {
             "City" to livingIn,
             "Gender" to gender,
             "Location" to location,
-            "Passion" to passions
-        )).addOnSuccessListener { e->
+            "Passion" to passions,
+            "Carousel" to listOfUrl
+        )
+
+        db.collection("users").document(uId).update(data).addOnSuccessListener { e->
             Toast.makeText(this, "Successfully Updated User Data", Toast.LENGTH_SHORT).show()
             // ni aku gatau apa aja
-            //sharedPref.putString(
-
+            sharedPref.putString("FullName", fullName)
+            sharedPref.putString("Alias", alias)
+            sharedPref.putString("Bio", bio)
+            sharedPref.putInt("Age", Integer.parseInt(age))
+            sharedPref.putString("Location", location)
+            sharedPref.putString("Gender", gender)
+        }.addOnFailureListener{
+                e->
+            Toast.makeText(this@EditInfo, "Profile failed to update", Toast.LENGTH_SHORT).show()
         }.addOnCompleteListener{
             startActivity(Intent(this, Home::class.java))
         }

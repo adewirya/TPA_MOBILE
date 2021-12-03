@@ -3,6 +3,8 @@ package edu.bluejack21_1.SunibTinder
 import android.annotation.SuppressLint
 import android.app.ProgressDialog
 import android.content.Intent
+import android.icu.number.NumberFormatter.with
+import android.icu.number.NumberRangeFormatter.with
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -88,7 +90,8 @@ class fragment_profile : Fragment() {
         db.collection("users").document(docId).get().addOnSuccessListener {
             e ->
             imageUrl = Uri.parse(e["Profile"].toString())
-            Picasso.with(this.requireContext()).load(imageUrl).into(imageView)
+            Picasso.get().load(imageUrl).into(imageView)
+
             binding.textView2.setText(e["FullName"].toString() + ", ")
             binding.userAge.setText(e["Age"].toString())
 

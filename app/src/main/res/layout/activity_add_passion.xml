@@ -16,10 +16,12 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="60dp"
             android:layout_marginTop="60dp"
+            android:layout_marginEnd="60dp"
             android:fontFamily="sans-serif-light"
             android:text="Passions"
             android:textColor="@color/White"
             android:textSize="48sp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -37,8 +39,9 @@
 
         <Button
             android:id="@+id/donePassionBtn"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="60dp"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="60dp"
             android:background="@color/White"
@@ -46,6 +49,7 @@
             android:textColor="@color/MainColor"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/passionLayout" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
