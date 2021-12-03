@@ -1,5 +1,6 @@
 package edu.bluejack21_1.SunibTinder
 
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.os.ProxyFileDescriptorCallback
@@ -86,8 +87,11 @@ class fragment_suggested : Fragment() {
         userDocIds = mutableListOf<String>()
         val btnNo = binding.btnNo
         val btnYes = binding.btnYes
+        val btnInfo = binding.btnInfo
 
-        searchSuggested()
+
+
+//        searchSuggested()
 
         btnNo.setOnClickListener{
             addToNo()
@@ -95,6 +99,14 @@ class fragment_suggested : Fragment() {
 
         btnYes.setOnClickListener{
             addToYes()
+        }
+
+        btnInfo.setOnClickListener{
+            activity?.let{
+                val intent = Intent (it, OtherProfile::class.java)
+                intent.putExtra("Uid", docId)
+                it.startActivity(intent)
+            }
         }
 
 
@@ -119,13 +131,18 @@ class fragment_suggested : Fragment() {
         * - Pastiin sesuai dengan location Preferences
         * -
         * */
-        val minage = sharedPref.getInt("MinAge")
-        val maxAge = sharedPref.getInt("MaxAge")
-        val location = sharedPref.getString("Location")
+        val minAge = Integer.parseInt(sharedPref.getInt("MinAge").toString())
+        val maxAge = Integer.parseInt(sharedPref.getInt("MaxAge").toString())
+        val location = sharedPref.getString("Location").toString()
+        val email = sharedPref.getString("Email").toString()
 
 
-
-//        db.collection("users").whereLessThan("Max Age", minage)
+        db.collection("users")
+            .whereLessThanOrEqualTo("Max Age", maxAge)
+            .whereGreaterThanOrEqualTo("Min Age", minAge)
+            .whereEqualTo("Gender", searchGender)
+            .whereEqualTo("Location", location)
+            .whereNotEqualTo("Email", email)
 
 
 

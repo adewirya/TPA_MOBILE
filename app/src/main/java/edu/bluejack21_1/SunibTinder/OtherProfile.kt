@@ -2,8 +2,9 @@ package edu.bluejack21_1.SunibTinder
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 
-class otherProfile : AppCompatActivity() {
+class OtherProfile : AppCompatActivity() {
 
 
     private lateinit var uId : String
@@ -17,6 +18,6 @@ class otherProfile : AppCompatActivity() {
             uId = extras.getString("Uid").toString()
         }
 
-
+        Toast.makeText(this@OtherProfile, uId, Toast.LENGTH_SHORT).show()
     }
 }
