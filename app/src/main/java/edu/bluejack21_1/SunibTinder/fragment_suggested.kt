@@ -18,6 +18,7 @@ import com.synnapps.carouselview.CarouselView
 import com.synnapps.carouselview.ImageListener
 import edu.bluejack21_1.SunibTinder.databinding.FragmentProfileBinding
 import edu.bluejack21_1.SunibTinder.databinding.FragmentSuggestedBinding
+import kotlin.properties.Delegates
 import kotlin.reflect.typeOf
 
 // TODO: Rename parameter arguments, choose names that match
@@ -31,16 +32,6 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class fragment_suggested : Fragment() {
-
-    /*
-    * Suggested List
-    * - Orang yang like
-    * - Orang yang berbeda gender
-    * - Orang yang sudah like tidak bisa muncul lagi klo sudah di like / unlike
-    * - Pastiin berdasarkan age range preferences
-    * - Pastiin sesuai dengan location Preferences
-    * -
-    * */
 
 
     private lateinit var listOfDocIds : MutableList<String>
@@ -57,6 +48,14 @@ class fragment_suggested : Fragment() {
 
     private lateinit var imageArray : MutableList<Uri>
     private lateinit var imageStrArray : MutableList<String>
+    private lateinit var userDocIds : MutableList<String>
+
+    private var currIdx : Int = 0
+
+    private lateinit var fullName : String
+    private lateinit var location : String
+    private var age : Int = 0
+    private lateinit var bio : String
 
     val db = Firebase.firestore
 
@@ -78,35 +77,114 @@ class fragment_suggested : Fragment() {
         v = FragmentSuggestedBinding.inflate(inflater, container, false)
 
 
+
         sharedPref = SharedPrefConfig(this.requireContext())
+
         docId = sharedPref.getString("Uid").toString()
         imageArray = mutableListOf<Uri>()
         imageStrArray = mutableListOf<String>()
-        val slider = binding.imageSliderSuggested
+        userDocIds = mutableListOf<String>()
+        val btnNo = binding.btnNo
+        val btnYes = binding.btnYes
 
-        val list = mutableListOf<SlideModel>()
+        searchSuggested()
 
-        getData {
-            e->
-            if (e){
-
-                //
-                for ( i in imageStrArray){
-                    list.add(SlideModel(i))
-                }
-
-                slider.setImageList(list,true)
-
-            }
+        btnNo.setOnClickListener{
+            addToNo()
         }
+
+        btnYes.setOnClickListener{
+            addToYes()
+        }
+
+
+        assignToSlider(docId)
 
         return v!!.root
     }
 
-    private fun getData(callback: (Boolean) -> Unit){
-        db.collection("users").document(docId).get().addOnSuccessListener {
+    private fun searchSuggested() {
+        var searchGender : String = "Female"
+
+        if (sharedPref.getString("Gender").equals("Female")){
+            searchGender = "Male"
+        }
+
+        /*
+        * Suggested List
+        * - Orang yang like
+        * - Orang yang berbeda gender
+        * - Orang yang sudah like tidak bisa muncul lagi klo sudah di like / unlike
+        * - Pastiin berdasarkan age range preferences
+        * - Pastiin sesuai dengan location Preferences
+        * -
+        * */
+        val minage = sharedPref.getInt("MinAge")
+        val maxAge = sharedPref.getInt("MaxAge")
+        val location = sharedPref.getString("Location")
+
+
+
+//        db.collection("users").whereLessThan("Max Age", minage)
+
+
+
+    }
+
+    private fun addToYes(){
+        // add yes to db
+
+
+
+        changeIdx()
+    }
+
+    private fun addToNo(){
+        // add no to db
+
+
+        changeIdx()
+    }
+
+    private fun changeIdx(){
+        imageStrArray.clear()
+        assignToSlider(docId)
+
+    }
+
+    private fun assignToSlider(documentId : String){
+        val slider = binding.imageSliderSuggested
+
+        val list = mutableListOf<SlideModel>()
+
+        getData(documentId) {
+                e->
+            if (e){
+                for ( i in imageStrArray){
+                    list.add(SlideModel(i))
+                }
+                slider.setImageList(list,true)
+            }
+        }
+    }
+
+    private fun getData(documentId : String, callback: (Boolean) -> Unit){
+        db.collection("users").document(documentId).get().addOnSuccessListener {
                 e->
             imageStrArray = e["Carousel"] as MutableList<String>
+
+            val fullName = binding.suggestFullName
+            val bio = binding.suggestBio
+            val age = binding.suggestAge
+            val location = binding.suggestLocation
+
+            fullName.text = e["FullName"].toString()
+            bio.text = e["Bio"].toString()
+            age.text = e["Age"].toString()
+            location.text = e["Location"].toString()
+
+
+
             callback(true)
         }.addOnFailureListener {
             Log.w("haha", "fail")
