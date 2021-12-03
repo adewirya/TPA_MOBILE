@@ -20,7 +20,22 @@
         <item>JWC</item>
         <item>ASO</item>
     </string-array>
-
+    <string-array name="passions">
+        <item>Sport</item>
+        <item>Foodie</item>
+        <item>Travel</item>
+        <item>Reading</item>
+        <item>Gaming</item>
+        <item>Anime</item>
+        <item>Movies</item>
+        <item>Coffe Addict</item>
+        <item>Gym</item>
+        <item>Fashion</item>
+        <item>Biking</item>
+        <item>Self Defense</item>
+        <item>Running</item>
+        <item>Healthy Eating</item>
+    </string-array>
 
     <string-array name="genders">
         <item>

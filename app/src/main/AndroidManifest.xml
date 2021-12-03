@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SunibTinder">
         <activity
+            android:name=".AddPassion"
+            android:exported="false" />
+        <activity
             android:name=".EditPassword"
             android:exported="true" />
         <activity
