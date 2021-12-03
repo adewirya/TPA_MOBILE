@@ -181,7 +181,8 @@
                 app:hintAnimationEnabled="false"
                 app:hintEnabled="false">
 
-                <com.google.android.material.textfield.TextInputEditText
+                <EditText
+                    android:id="@+id/nameTxtField"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:singleLine="true"
@@ -223,7 +224,8 @@
                 app:hintAnimationEnabled="false"
                 app:hintEnabled="false">
 
-                <com.google.android.material.textfield.TextInputEditText
+                <EditText
+                    android:id="@+id/aliasTxtField"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:singleLine="true"
@@ -265,12 +267,14 @@
                 app:hintAnimationEnabled="false"
                 app:hintEnabled="false">
 
-                <com.google.android.material.textfield.TextInputEditText
+                <EditText
+                    android:id="@+id/bioTxtField"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/textfield_design"
                     android:singleLine="false"
-                    android:textColor="@color/black" />
+                    android:textColor="@color/black"
+                    />
             </com.google.android.material.textfield.TextInputLayout>
 
         </androidx.cardview.widget.CardView>
@@ -299,10 +303,9 @@
             app:layout_constraintTop_toBottomOf="@id/textView14">
 
             <Spinner
-                android:id="@+id/locationSpinner3"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:id="@+id/genderSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 tools:ignore="MissingConstraints" />
         </androidx.cardview.widget.CardView>
 
@@ -339,7 +342,8 @@
                 app:hintAnimationEnabled="false"
                 app:hintEnabled="false">
 
-                <com.google.android.material.textfield.TextInputEditText
+                <EditText
+                    android:id="@+id/ageTxtField"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="number"
@@ -364,7 +368,7 @@
         <androidx.cardview.widget.CardView
             android:id="@+id/cardView19"
             android:layout_width="0dp"
-            android:layout_height="75dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
             android:layout_marginTop="5dp"
             android:layout_marginEnd="24dp"
@@ -375,49 +379,33 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <TextView
+                    android:id="@+id/passionTextView"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="35dp"
-                    android:background="#FFFFFF"
-                    app:layout_constraintTop_toTopOf="parent">
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:textSize="16sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/textInputLayout"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginEnd="100dp"
-                        android:background="@drawable/textfield_design"
-                        android:scrollbarStyle="insideInset"
-                        app:boxBackgroundMode="none"
-                        app:hintAnimationEnabled="false"
-                        app:hintEnabled="false"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:singleLine="true"
-                            android:textColor="@color/black" />
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <Button
-                        android:id="@+id/addPassionBtn"
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:layout_marginStart="12dp"
-                        android:backgroundTint="@color/White"
-                        android:text="ADD"
-                        android:textColor="@color/MainColor"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/textInputLayout"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                <Button
+                    android:id="@+id/addPassionBtn"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="10dp"
+                    android:backgroundTint="@color/White"
+                    android:text="Modify"
+                    android:textColor="@color/MainColor"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/passionTextView" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -450,10 +438,9 @@
             app:layout_constraintTop_toBottomOf="@id/textView13">
 
             <Spinner
-                android:id="@+id/locationSpinner2"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:id="@+id/locationSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 tools:ignore="MissingConstraints" />
 
         </androidx.cardview.widget.CardView>
@@ -490,7 +477,8 @@
                 app:hintAnimationEnabled="false"
                 app:hintEnabled="false">
 
-                <com.google.android.material.textfield.TextInputEditText
+                <EditText
+                    android:id="@+id/livingInTxtField"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:singleLine="true"
