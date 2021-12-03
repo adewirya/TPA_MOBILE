@@ -19,6 +19,7 @@ import com.synnapps.carouselview.CarouselView
 import com.synnapps.carouselview.ImageListener
 import edu.bluejack21_1.SunibTinder.databinding.FragmentProfileBinding
 import edu.bluejack21_1.SunibTinder.databinding.FragmentSuggestedBinding
+import kotlinx.coroutines.selects.select
 import kotlin.properties.Delegates
 import kotlin.random.Random
 import kotlin.reflect.typeOf
@@ -51,7 +52,13 @@ class fragment_suggested : Fragment() {
     private lateinit var imageArray : MutableList<Uri>
     private lateinit var imageStrArray : MutableList<String>
 
-    private var currIdx : Int = 0
+    private lateinit var listOfLikes : MutableList<String>
+    private lateinit var listOfUnlikes : MutableList<String>
+    private lateinit var listOfMatches : MutableList<String>
+
+    val limit : Long = 2
+
+    private var currIdx : Long = 0
 
     private lateinit var fullName : String
     private lateinit var location : String
@@ -85,13 +92,28 @@ class fragment_suggested : Fragment() {
         imageArray = mutableListOf<Uri>()
         imageStrArray = mutableListOf<String>()
         listOfDocIds= mutableListOf<String>()
+
+        listOfLikes = mutableListOf<String>()
+        listOfUnlikes = mutableListOf<String>()
+        listOfMatches = mutableListOf<String>()
+
         val btnNo = binding.btnNo
         val btnYes = binding.btnYes
         val btnInfo = binding.btnInfo
 
 
 
-        searchSuggested()
+        getData {
+            es->
+            if (es){
+                searchSuggested{
+                        e->
+                    if (e){
+                        assignToSlider(listOfDocIds[currIdx.toInt()])
+                    }
+                }
+            }
+        }
 
         btnNo.setOnClickListener{
             addToNo()
@@ -109,15 +131,42 @@ class fragment_suggested : Fragment() {
             }
         }
 
-
-        assignToSlider(docId)
-
         return v!!.root
     }
 
-    private fun searchSuggested() {
-        var searchGender : String = "Female"
 
+    private fun getData(callback: (Boolean) -> Unit){
+
+        db.collection("users").document(docId).get().addOnSuccessListener {
+            e->
+            if (e["Likes"] == null){
+                listOfLikes = mutableListOf<String>()
+            }
+            else {
+                listOfLikes = e["Likes"] as MutableList<String>
+            }
+
+            if (e["Unlikes"] == null ){
+                listOfUnlikes = mutableListOf<String>()
+            }
+            else {
+                listOfUnlikes = e["Unlikes"] as MutableList<String>
+            }
+
+            if (e["Match"] == null){
+                listOfMatches = mutableListOf<String>()
+            }
+            else {
+                listOfMatches = e["Matches"] as MutableList<String>
+            }
+        }.addOnCompleteListener{
+            callback(true)
+        }
+    }
+
+    private fun searchSuggested(callback: (Boolean) -> Unit) {
+        var searchGender : String = "Female"
+        listOfDocIds.clear()
         if (sharedPref.getString("Gender").equals("Female")){
             searchGender = "Male"
         }
@@ -137,45 +186,114 @@ class fragment_suggested : Fragment() {
         val email = sharedPref.getString("Email").toString()
         val preferences = sharedPref.getString("Preferences").toString()
 
+        Log.w("teshaha", "search gender : ${searchGender} location : ${location}")
+
         var size : Int = 0
 
         db.collection("users").get().addOnSuccessListener {
             e->
             size = e.size()
-        }
+        }.addOnCompleteListener{
 
-//        Log.w("teshehe", size.toString())
+            val startAt = Math.ceil(Random.nextDouble(0.0,1.0) * size).toInt()
 
-        val startAt = Math.ceil(Random.nextDouble(0.0,1.0) * size)
+            Log.w("teshehe", startAt.toString())
 
-        Log.w("teshehe", startAt.toString())
+            if (preferences.equals("Same Campus")){
+                db.collection("users")
+//                    .whereLessThanOrEqualTo("Age", maxAge)
+//                    .whereGreaterThanOrEqualTo("Age", minAge)
+                    .whereEqualTo("Gender", searchGender)
+                    .whereEqualTo("Location", location)
+//                    .orderBy("Age")
+                    .orderBy("Number")
+                    .startAt(startAt)
+                    .limit(limit)
+                    .get().addOnSuccessListener {
+                            dcs->
 
+                        for (i in dcs){
+//                            Log.w("teshehe", i.toString())
+                            if (i.id != docId){
+                                listOfDocIds.add(i.id)
+                            }
+                        }
+                    }.addOnFailureListener{
+                            e ->
+                        Log.w("teshehe", e.toString())
+                    }.addOnCompleteListener{
+                        Log.w("teshehe", listOfDocIds.toString())
+                        if (listOfDocIds.size < limit){
+                            db.collection("users")
+                                .whereEqualTo("Gender", searchGender)
+                                .limit((limit - listOfDocIds.size).toLong())
+                                .get()
+                                .addOnSuccessListener {
+                                    e->
+                                    for (i in e){
 
-        if (preferences.equals("Same Campus")){
-            db.collection("users")
-                .whereLessThanOrEqualTo("Age", maxAge)
-                .whereGreaterThanOrEqualTo("Age", minAge)
-                .whereEqualTo("Gender", searchGender)
-                .whereEqualTo("Location", location)
-                .orderBy("Age")
-                .orderBy("Number")
-                .get().addOnSuccessListener {
-                        dcs->
+                                        if (i.id != docId){
+                                            listOfDocIds.add(i.id)
+                                        }
 
-                    for (i in dcs){
-                        if (i.id != docId){
-                            listOfDocIds.add(i.id)
+                                    }
+                                }.addOnCompleteListener{
+                                    Log.w("teshehe", listOfDocIds.toString())
+                                    callback(true)
+                                }
+                        }
+                        else {
+                            callback(true)
                         }
                     }
-                }.addOnFailureListener{
-                        e ->
-                    Log.w("teshehe", e.toString())
-                }.addOnCompleteListener{
-                    Log.w("teshehe", listOfDocIds.toString())
-                }
-        }
-        else {
-            Log.w("teshehe", "hohohoho")
+            }
+            else {
+                db.collection("users")
+//                    .whereLessThanOrEqualTo("Age", maxAge)
+//                    .whereGreaterThanOrEqualTo("Age", minAge)
+                    .whereEqualTo("Gender", searchGender)
+//                    .orderBy("Age")
+                    .orderBy("Number")
+                    .startAt(startAt)
+                    .limit(limit)
+                    .get().addOnSuccessListener {
+                            dcs->
+
+                        for (i in dcs){
+//                            Log.w("teshehe", i.toString())
+                            if (i.id != docId){
+                                listOfDocIds.add(i.id)
+                            }
+                        }
+                    }.addOnFailureListener{
+                            e ->
+                        Log.w("teshehe", e.toString())
+                    }.addOnCompleteListener{
+                        Log.w("teshehe", listOfDocIds.toString())
+                        if (listOfDocIds.size < limit){
+                            db.collection("users")
+                                .whereEqualTo("Gender", searchGender)
+                                .limit((limit - listOfDocIds.size).toLong())
+                                .get()
+                                .addOnSuccessListener {
+                                        e->
+                                    for (i in e){
+
+                                        if (i.id != docId){
+                                            listOfDocIds.add(i.id)
+                                        }
+
+                                    }
+                                }.addOnCompleteListener{
+                                    Log.w("teshehe", listOfDocIds.toString())
+                                    callback(true)
+                                }
+                        }
+                        else {
+                            callback(true)
+                        }
+                    }
+            }
         }
 
 
@@ -183,8 +301,54 @@ class fragment_suggested : Fragment() {
 
     private fun addToYes(){
         // add yes to db
+        val selectedDoc : String = listOfDocIds[currIdx.toInt()]
 
+        listOfLikes.add(selectedDoc)
 
+        Toast.makeText(this.requireContext(), "masuk 1", Toast.LENGTH_SHORT).show()
+
+        db.collection("users").document(docId).update(
+            "Likes",
+            listOfLikes
+        ).addOnSuccessListener {
+//            Toast.makeText(this.requireContext(), "Added to like", Toast.LENGTH_SHORT).show()
+        }.addOnCompleteListener{
+
+            db.collection("users").document(selectedDoc).get().addOnSuccessListener {
+                e->
+
+                var searchArr : MutableList<String> = mutableListOf<String>()
+                if (e["Likes"] != null){
+                    searchArr = e["Likes"] as MutableList<String>
+                }
+
+//                Toast.makeText(this.requireContext(), "masuk 2", Toast.LENGTH_SHORT).show()
+
+                for (i in searchArr){
+                    if (i.equals(docId)){
+                        Toast.makeText(this.requireContext(), "You have found a match", Toast.LENGTH_SHORT).show()
+                        listOfMatches.add(selectedDoc)
+
+                        db.collection("users").document(docId).update("Match", listOfMatches)
+
+                        Toast.makeText(this.requireContext(), "masuk 3", Toast.LENGTH_SHORT).show()
+
+                        var tempArr : MutableList<String> = mutableListOf<String>()
+                        db.collection("users").document(selectedDoc).get().addOnSuccessListener {
+                            e->
+                            if (e["Match"] != null){
+                                tempArr = e["Match"] as MutableList<String>
+                            }
+                            tempArr.add(docId)
+                        }.addOnCompleteListener{
+                            db.collection("users").document(selectedDoc).update(
+                                "Match", tempArr
+                            )
+                        }
+                    }
+                }
+            }
+        }
 
         changeIdx()
     }
@@ -197,9 +361,21 @@ class fragment_suggested : Fragment() {
     }
 
     private fun changeIdx(){
+        currIdx += 1
         imageStrArray.clear()
-        assignToSlider(docId)
 
+        if (currIdx == (listOfDocIds.size).toLong() ){
+            searchSuggested {
+                e->
+                 if (e){
+                     currIdx = 0
+                     assignToSlider(listOfDocIds[currIdx.toInt()])
+                 }
+            }
+        }
+        else {
+            assignToSlider(listOfDocIds[currIdx.toInt()])
+        }
     }
 
     private fun assignToSlider(documentId : String){

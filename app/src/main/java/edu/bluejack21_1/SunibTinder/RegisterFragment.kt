@@ -129,7 +129,9 @@ class RegisterFragment : Fragment() {
                             "Carousel" to listOf(""),
                             "Preferences" to "Same Campus",
                             "Min Age" to 0,
-                            "Max Age" to 100
+                            "Max Age" to 100,
+                            "Likes" to listOf(""),
+                            "Match" to listOf("")
                         )
 
                         val sharedPref = SharedPrefConfig(this.requireContext())

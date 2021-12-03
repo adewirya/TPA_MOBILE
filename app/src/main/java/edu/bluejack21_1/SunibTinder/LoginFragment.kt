@@ -151,11 +151,17 @@ class LoginFragment : Fragment() {
 
                     for (i in e){
                         sharedPref.putString("Uid", i.id)
+                        sharedPref.putString("Gender", i["Gender"].toString())
+                        sharedPref.putString("Location", i["Location"].toString())
+                        sharedPref.putString("Preferences", i["Preferences"].toString())
+                        sharedPref.putString("City", i["City"].toString())
+                        sharedPref.putInt("Age", Integer.parseInt(i["Age"].toString()))
+                        sharedPref.putInt("MinAge", Integer.parseInt(i["Min Age"].toString()))
+                        sharedPref.putInt("MaxAge", Integer.parseInt(i["Max Age"].toString()))
                     }
                     sharedPref.putBoolean("IsGoogle", false)
                     sharedPref.putString("Email", email)
                     sharedPref.putString("Password", password)
-
                     callback(true)
                 }
 
@@ -189,6 +195,8 @@ class LoginFragment : Fragment() {
                         sharedPref.putString("Preferences", i["Preferences"].toString())
                         sharedPref.putString("City", i["City"].toString())
                         sharedPref.putInt("Age", Integer.parseInt(i["Age"].toString()))
+                        sharedPref.putInt("MinAge", Integer.parseInt(i["Min Age"].toString()))
+                        sharedPref.putInt("MaxAge", Integer.parseInt(i["Max Age"].toString()))
                     }
                     callback(true)
                 }
@@ -286,7 +294,9 @@ class LoginFragment : Fragment() {
                                 "Carousel" to listOf(""),
                                 "Preferences" to "Same Campus",
                                 "Min Age" to 0,
-                                "Max Age" to 100
+                                "Max Age" to 100,
+                                "Likes" to listOf(""),
+                                "Match" to listOf("")
                             )
 
 
