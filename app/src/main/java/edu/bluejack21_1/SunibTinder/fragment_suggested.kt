@@ -20,6 +20,7 @@ import com.synnapps.carouselview.ImageListener
 import edu.bluejack21_1.SunibTinder.databinding.FragmentProfileBinding
 import edu.bluejack21_1.SunibTinder.databinding.FragmentSuggestedBinding
 import kotlin.properties.Delegates
+import kotlin.random.Random
 import kotlin.reflect.typeOf
 
 // TODO: Rename parameter arguments, choose names that match
@@ -49,7 +50,6 @@ class fragment_suggested : Fragment() {
 
     private lateinit var imageArray : MutableList<Uri>
     private lateinit var imageStrArray : MutableList<String>
-    private lateinit var userDocIds : MutableList<String>
 
     private var currIdx : Int = 0
 
@@ -84,7 +84,7 @@ class fragment_suggested : Fragment() {
         docId = sharedPref.getString("Uid").toString()
         imageArray = mutableListOf<Uri>()
         imageStrArray = mutableListOf<String>()
-        userDocIds = mutableListOf<String>()
+        listOfDocIds= mutableListOf<String>()
         val btnNo = binding.btnNo
         val btnYes = binding.btnYes
         val btnInfo = binding.btnInfo
@@ -135,24 +135,48 @@ class fragment_suggested : Fragment() {
         val maxAge = Integer.parseInt(sharedPref.getInt("MaxAge").toString())
         val location = sharedPref.getString("Location").toString()
         val email = sharedPref.getString("Email").toString()
+        val preferences = sharedPref.getString("Preferences").toString()
 
-        Toast.makeText(this.requireContext(), "hehe ada masuk", Toast.LENGTH_SHORT).show()
+        var size : Int = 0
 
-        db.collection("users")
-            .whereLessThanOrEqualTo("Age", maxAge)
-            .whereGreaterThanOrEqualTo("Age", minAge)
-            .whereEqualTo("Gender", searchGender)
-            .whereEqualTo("Location", location)
-            .get().addOnSuccessListener {
-                dcs->
-                Toast.makeText(this.requireContext(), "hehe ada", Toast.LENGTH_SHORT).show()
-                for (i in dcs){
-                    Log.w("teshehe", i.id.toString())
+        db.collection("users").get().addOnSuccessListener {
+            e->
+            size = e.size()
+        }
+
+//        Log.w("teshehe", size.toString())
+
+        val startAt = Math.ceil(Random.nextDouble(0.0,1.0) * size)
+
+        Log.w("teshehe", startAt.toString())
+
+
+        if (preferences.equals("Same Campus")){
+            db.collection("users")
+                .whereLessThanOrEqualTo("Age", maxAge)
+                .whereGreaterThanOrEqualTo("Age", minAge)
+                .whereEqualTo("Gender", searchGender)
+                .whereEqualTo("Location", location)
+                .orderBy("Age")
+                .orderBy("Number")
+                .get().addOnSuccessListener {
+                        dcs->
+
+                    for (i in dcs){
+                        if (i.id != docId){
+                            listOfDocIds.add(i.id)
+                        }
+                    }
+                }.addOnFailureListener{
+                        e ->
+                    Log.w("teshehe", e.toString())
+                }.addOnCompleteListener{
+                    Log.w("teshehe", listOfDocIds.toString())
                 }
-            }.addOnFailureListener{
-                e ->
-                Log.w("teshehe", e.toString())
-            }
+        }
+        else {
+            Log.w("teshehe", "hohohoho")
+        }
 
 
     }

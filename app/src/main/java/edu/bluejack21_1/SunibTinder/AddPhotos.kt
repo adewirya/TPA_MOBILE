@@ -163,7 +163,7 @@ class AddPhotos : AppCompatActivity() {
 
         }
 
-//        Toast.makeText(this@AddPhotos, "onclick listener ada", Toast.LENGTH_SHORT).show()
+
     }
 
     private fun choosePicture(RequestCode : Int) {
@@ -198,7 +198,6 @@ class AddPhotos : AppCompatActivity() {
             img3.setImageURI(imageUrl3)
             uploaded += 1
             bol3 = true
-//            Toast.makeText(this@AddPhotos, "masuk", Toast.LENGTH_SHORT).show()
             listOfNum.add(3)
         }
 

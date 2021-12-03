@@ -185,6 +185,10 @@ class LoginFragment : Fragment() {
                     for(i in e.documents){
                         sharedPref.putString("Uid", i.id)
                         sharedPref.putString("Gender", i["Gender"].toString())
+                        sharedPref.putString("Location", i["Location"].toString())
+                        sharedPref.putString("Preferences", i["Preferences"].toString())
+                        sharedPref.putString("City", i["City"].toString())
+                        sharedPref.putInt("Age", Integer.parseInt(i["Age"].toString()))
                     }
                     callback(true)
                 }
@@ -255,46 +259,57 @@ class LoginFragment : Fragment() {
                 checkExistsGoogleAccount(personEmail){
                         e ->
                     if(!e){
-                        // register
-                        val data = hashMapOf(
-                            "FullName" to personName,
-                            "Alias" to personGivenName,
-                            "Email" to personEmail,
-                            "Password" to "",
-                            "FromGoogle" to true,
-                            "Location" to "Anggrek",
-                            "Gender" to "Male",
-                            "City" to "",
-                            "Passions" to listOf(""),
-                            "Age" to 0,
-                            "Bio" to "",
-                            "Profile" to "",
-                            "Carousel" to listOf(""),
-                            "Preferences" to "Same Campus",
-                            "Min Age" to 0,
-                            "Max Age" to 100
-                        )
+
+                        var number : Int = 0
+
+                        db.collection("users").get().addOnSuccessListener {
+                                e->
+                            number = e.size()
+                        }.addOnCompleteListener {
+
+                            number += 1
+                            // register
+                            val data = hashMapOf(
+                                "Number" to number,
+                                "FullName" to personName,
+                                "Alias" to personGivenName,
+                                "Email" to personEmail,
+                                "Password" to "",
+                                "FromGoogle" to true,
+                                "Location" to "Anggrek",
+                                "Gender" to "Male",
+                                "City" to "",
+                                "Passions" to listOf(""),
+                                "Age" to 0,
+                                "Bio" to "",
+                                "Profile" to "",
+                                "Carousel" to listOf(""),
+                                "Preferences" to "Same Campus",
+                                "Min Age" to 0,
+                                "Max Age" to 100
+                            )
 
 
-                        sharedPref.putInt("MinAge", 0)
-                        sharedPref.putInt("MaxAge", 100)
-                        sharedPref.putString("FullName", personName)
-                        sharedPref.putString("Email", personEmail)
-                        sharedPref.putBoolean("IsGoogle",true)
-                        sharedPref.putString("Preferences", "Same Campus")
+                            sharedPref.putInt("MinAge", 0)
+                            sharedPref.putInt("MaxAge", 100)
+                            sharedPref.putString("FullName", personName)
+                            sharedPref.putString("Email", personEmail)
+                            sharedPref.putBoolean("IsGoogle",true)
+                            sharedPref.putString("Preferences", "Same Campus")
 
-                        db.collection("users").add(data).addOnSuccessListener { e ->
-                            Toast.makeText(this.requireContext(), "User " + e.id, Toast.LENGTH_SHORT).show()
-                            sharedPref.putString("Uid", e.id)
+                            db.collection("users").add(data).addOnSuccessListener { e ->
+//                                Toast.makeText(this.requireContext(), "User " + e.id, Toast.LENGTH_SHORT).show()
+                                sharedPref.putString("Uid", e.id)
 
-                        }.addOnFailureListener{ e ->
-                            Log.w("teseror", "Error adding document", e)
-                            Toast.makeText(this.requireContext(), "Failed add new user", Toast.LENGTH_SHORT).show()
-                        }.addOnCompleteListener{
+                            }.addOnFailureListener{ e ->
+                                Log.w("teseror", "Error adding document", e)
+                                Toast.makeText(this.requireContext(), "Failed add new user", Toast.LENGTH_SHORT).show()
+                            }.addOnCompleteListener{
 
-                            activity?.let{
-                                val intent = Intent (it, AddPhotos::class.java)
-                                it.startActivity(intent)
+                                activity?.let{
+                                    val intent = Intent (it, AddPhotos::class.java)
+                                    it.startActivity(intent)
+                                }
                             }
                         }
 

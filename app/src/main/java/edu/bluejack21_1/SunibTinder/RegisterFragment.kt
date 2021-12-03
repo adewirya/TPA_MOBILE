@@ -103,61 +103,75 @@ class RegisterFragment : Fragment() {
                     loadingCircle.dismiss()
                 }
                 else {
-                    val data = hashMapOf(
-                        "FullName" to fullName,
-                        "Alias" to "",
-                        "Email" to email,
-                        "Password" to password,
-                        "FromGoogle" to false,
-                        "Location" to location,
-                        "Gender" to gender,
-                        "City" to "",
-                        "Passions" to listOf(""),
-                        "Age" to 0,
-                        "Bio" to "",
-                        "Profile" to "",
-                        "Carousel" to listOf(""),
-                        "Preferences" to "Same Campus",
-                        "Min Age" to 0,
-                        "Max Age" to 100
-                    )
+                    var number : Int = 0
 
-                    val sharedPref = SharedPrefConfig(this.requireContext())
-                    sharedPref.putInt("MinAge", 0)
-                    sharedPref.putInt("MaxAge", 100)
+                    db.collection("users").get().addOnSuccessListener {
+                        e->
+                        number = e.size()
+                    }.addOnCompleteListener{
+                        number += 1
+                        Log.w("teshehe", number.toString())
 
-                    db.collection("users").add(data).addOnSuccessListener { documentReference ->
-                        Log.d("add new user", "DocumentSnapshot written with ID: ${documentReference.id}")
-                        Toast.makeText(
-                            this.requireContext(),
-                            "Registered Succesfully",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        val data = hashMapOf(
+                            "Number" to number,
+                            "FullName" to fullName,
+                            "Alias" to "",
+                            "Email" to email,
+                            "Password" to password,
+                            "FromGoogle" to false,
+                            "Location" to location,
+                            "Gender" to gender,
+                            "City" to "",
+                            "Passions" to listOf(""),
+                            "Age" to 0,
+                            "Bio" to "",
+                            "Profile" to "",
+                            "Carousel" to listOf(""),
+                            "Preferences" to "Same Campus",
+                            "Min Age" to 0,
+                            "Max Age" to 100
+                        )
 
-                        sharedPref.putString("Uid", documentReference.id.toString())
-                        sharedPref.putString("FullName", fullName)
-                        sharedPref.putString("Email", email)
-                        sharedPref.putBoolean("IsGoogle", false)
-                        sharedPref.putString("Password", password)
-                        sharedPref.putString("Location", location)
-                        sharedPref.putString("Gender", gender)
-                        sharedPref.putString("Preferences", "Same Campus")
+                        val sharedPref = SharedPrefConfig(this.requireContext())
+                        sharedPref.putInt("MinAge", 0)
+                        sharedPref.putInt("MaxAge", 100)
+                        sharedPref.putInt("Number", number)
 
-                        loadingCircle.dismiss()
-                        activity?.let{
 
-                            if (sharedPref.getString("Uid") != ""){
-                                val intent = Intent (it, AddPhotos::class.java)
-                                it.startActivity(intent)
-                            } else {
-                                sharedPref.putString("Uid", documentReference.id.toString())
+                        db.collection("users").add(data).addOnSuccessListener { documentReference ->
+                            Log.d("add new user", "DocumentSnapshot written with ID: ${documentReference.id}")
+                            Toast.makeText(
+                                this.requireContext(),
+                                "Registered Succesfully",
+                                Toast.LENGTH_SHORT
+                            ).show()
+
+                            sharedPref.putString("Uid", documentReference.id.toString())
+                            sharedPref.putString("FullName", fullName)
+                            sharedPref.putString("Email", email)
+                            sharedPref.putBoolean("IsGoogle", false)
+                            sharedPref.putString("Password", password)
+                            sharedPref.putString("Location", location)
+                            sharedPref.putString("Gender", gender)
+                            sharedPref.putString("Preferences", "Same Campus")
+
+                            loadingCircle.dismiss()
+                            activity?.let{
+
+                                if (sharedPref.getString("Uid") != ""){
+                                    val intent = Intent (it, AddPhotos::class.java)
+                                    it.startActivity(intent)
+                                } else {
+                                    sharedPref.putString("Uid", documentReference.id.toString())
+                                }
                             }
-                        }
 
-                    }.addOnFailureListener{ e ->
-                        Log.w("teseror", "Error adding document", e)
-                        Toast.makeText(this.requireContext(), "Failed add new user", Toast.LENGTH_SHORT).show()
+                        }.addOnFailureListener{ e ->
+                            Log.w("teseror", "Error adding document", e)
+                            Toast.makeText(this.requireContext(), "Failed add new user", Toast.LENGTH_SHORT).show()
+                        }
                     }
+
                 }
 
         }
