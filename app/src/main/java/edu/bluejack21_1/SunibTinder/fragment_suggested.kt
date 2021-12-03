@@ -31,6 +31,20 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class fragment_suggested : Fragment() {
+
+    /*
+    * Suggested List
+    * - Orang yang like
+    * - Orang yang berbeda gender
+    * - Orang yang sudah like tidak bisa muncul lagi klo sudah di like / unlike
+    * - Pastiin berdasarkan age range preferences
+    * - Pastiin sesuai dengan location Preferences
+    * -
+    * */
+
+
+    private lateinit var listOfDocIds : MutableList<String>
+
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null

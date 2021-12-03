@@ -20,6 +20,7 @@ class AddPassion : AppCompatActivity() {
     private lateinit var passionDoneBtn : Button
     private lateinit var sharedPref : SharedPrefConfig
     private lateinit var passionPref : String
+    private lateinit var listOfPassion : MutableList<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,13 +29,15 @@ class AddPassion : AppCompatActivity() {
         passionLayout = findViewById<LinearLayout>(R.id.passionLayout)
         passionDoneBtn = findViewById<Button>(R.id.donePassionBtn)
         passionLayout.orientation = LinearLayout.VERTICAL
-        passionPref = sharedPref.getString("passion").toString()
+        passionPref = sharedPref.getString("Passion").toString()
 
         val passionSelectedList = passionPref.split(",")
 
         val passionList = resources.getStringArray(R.array.passions).toList()
         val checkList = mutableListOf<Boolean>()
         var index = 0
+
+        listOfPassion = mutableListOf<String>()
 
         for(p in passionList){
             val btn : Button = Button(this)
@@ -73,6 +76,7 @@ class AddPassion : AppCompatActivity() {
             var selected = ""
             for(b in checkList){
                 if(b){
+                    listOfPassion.add(passionList.get(index).toString())
                     selected += passionList.get(index).toString() + ","
                 }
 
@@ -85,9 +89,9 @@ class AddPassion : AppCompatActivity() {
             val docId = sharedPref.getString("Uid").toString()
             val db  = Firebase.firestore
 
-            db.collection("users").document(docId).update("Passion", selected).addOnSuccessListener {
+            db.collection("users").document(docId).update("Passion", listOfPassion).addOnSuccessListener {
                 e->
-                    Toast.makeText(this@AddPassion, "Passion added succesfully", Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(this@AddPassion, "Passion added succesfully", Toast.LENGTH_SHORT).show()
             }.addOnCompleteListener{
                 finish()
             }

@@ -5,6 +5,14 @@ import android.content.Context
 class SharedPrefConfig (context: Context){
     private val sharedPreferences = context.getSharedPreferences("myPreferences", 0)
 
+//    sharedPref.putInt("MinAge", 0)
+//    sharedPref.putInt("MaxAge", 100)
+//    sharedPref.putString("FullName", personName)
+//    sharedPref.putString("Email", personEmail)
+//    sharedPref.putBoolean("IsGoogle",true)
+//    sharedPref.putString("Preferences", "Same Campus")
+
+
     fun putString(key: String, value : String){
         sharedPreferences.edit().putString(key, value).apply()
     }

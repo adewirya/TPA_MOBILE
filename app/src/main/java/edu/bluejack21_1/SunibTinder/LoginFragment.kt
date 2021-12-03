@@ -184,6 +184,7 @@ class LoginFragment : Fragment() {
                     // get document id based on fields
                     for(i in e.documents){
                         sharedPref.putString("Uid", i.id)
+                        sharedPref.putString("Gender", i["Gender"].toString())
                     }
                     callback(true)
                 }
