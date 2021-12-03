@@ -91,7 +91,7 @@ class fragment_suggested : Fragment() {
 
 
 
-//        searchSuggested()
+        searchSuggested()
 
         btnNo.setOnClickListener{
             addToNo()
@@ -136,14 +136,23 @@ class fragment_suggested : Fragment() {
         val location = sharedPref.getString("Location").toString()
         val email = sharedPref.getString("Email").toString()
 
+        Toast.makeText(this.requireContext(), "hehe ada masuk", Toast.LENGTH_SHORT).show()
 
         db.collection("users")
-            .whereLessThanOrEqualTo("Max Age", maxAge)
-            .whereGreaterThanOrEqualTo("Min Age", minAge)
+            .whereLessThanOrEqualTo("Age", maxAge)
+            .whereGreaterThanOrEqualTo("Age", minAge)
             .whereEqualTo("Gender", searchGender)
             .whereEqualTo("Location", location)
-            .whereNotEqualTo("Email", email)
-
+            .get().addOnSuccessListener {
+                dcs->
+                Toast.makeText(this.requireContext(), "hehe ada", Toast.LENGTH_SHORT).show()
+                for (i in dcs){
+                    Log.w("teshehe", i.id.toString())
+                }
+            }.addOnFailureListener{
+                e ->
+                Log.w("teshehe", e.toString())
+            }
 
 
     }
