@@ -113,7 +113,7 @@ class fragment_suggested : Fragment() {
         val btnYes = binding.btnYes
         val btnInfo = binding.btnInfo
 
-        setAlarm()
+        setNotif()
 
         passionLayout = binding.passionLayout
 
@@ -347,9 +347,6 @@ class fragment_suggested : Fragment() {
                         listOfMatches.add(selectedDoc)
 
                         db.collection("users").document(docId).update("Match", listOfMatches)
-
-//                        Toast.makeText(this.requireContext(), "masuk 3", Toast.LENGTH_SHORT).show()
-
                         var tempArr : MutableList<String> = mutableListOf<String>()
                         db.collection("users").document(selectedDoc).get().addOnSuccessListener {
                             e->
@@ -373,20 +370,20 @@ class fragment_suggested : Fragment() {
 
 
 
-    public fun setAlarm(){
-//        Log.w("Hensemganteng", "muehehe")
+    fun setNotif(){
         val alarmManager = context?.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val alarmIntent = Intent(this.requireContext(), AlarmReceiverService::class.java)
         val pendingIntent = PendingIntent.getBroadcast(this.requireContext(), 0, alarmIntent, 0)
         alarmManager.cancel(pendingIntent)
         val cal = Calendar.getInstance()
-        cal.add(Calendar.SECOND, 1)
+        cal.add(Calendar.SECOND, 4)
         alarmManager.setInexactRepeating(
             AlarmManager.RTC_WAKEUP,
             cal.timeInMillis,
             AlarmManager.INTERVAL_DAY,
             pendingIntent
         )
+        Log.w("Hensemganteng", "muehehe")
     }
 
     private fun addToNo(){
