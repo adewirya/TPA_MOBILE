@@ -84,12 +84,13 @@ class fragment_profile : Fragment() {
         storageRef = storage.getReference()
 
         var imageUrl : Uri
-
+        imageUrl = Uri.parse("")
 
 
         db.collection("users").document(docId).get().addOnSuccessListener {
             e ->
-            imageUrl = Uri.parse(e["Profile"].toString())
+            val arr : List<String> = e["Carousel"] as List<String>
+            imageUrl = Uri.parse(arr[0])
             Picasso.get().load(imageUrl).into(imageView)
 
             binding.textView2.setText(e["FullName"].toString() + ", ")
@@ -107,9 +108,8 @@ class fragment_profile : Fragment() {
             else {
                 binding.textView5.setText(e["Bio"].toString())
             }
-
-
-
+        }.addOnCompleteListener{
+            db.collection("users").document(docId).update("Profile", imageUrl)
         }
 
         imageView.setOnClickListener{
