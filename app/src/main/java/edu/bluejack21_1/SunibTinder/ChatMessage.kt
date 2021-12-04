@@ -126,11 +126,13 @@ class ChatMessage : AppCompatActivity() {
                         }
                         viewedList.reverse()
                         if(until != 0){
-                            if(messageAdapter == null){
-                                messageAdapter = MessageAdapter(this@ChatMessage,viewedList,senderId)
-                                recyclerview.adapter = messageAdapter
-                            }else{
-                                messageAdapter!!.notifyDataSetChanged()
+                            if(viewedList.size != 0){
+                                if(messageAdapter == null){
+                                    messageAdapter = MessageAdapter(this@ChatMessage,viewedList,senderId)
+                                    recyclerview.adapter = messageAdapter
+                                }else{
+                                    messageAdapter!!.notifyDataSetChanged()
+                                }
                             }
 
 
@@ -311,14 +313,22 @@ class ChatMessage : AppCompatActivity() {
                         }
 
                     }
-                    viewedList.add(lastMsg)
 
-                    if(messageAdapter == null){
-                        messageAdapter = MessageAdapter(this@ChatMessage,viewedList,senderId)
-                        recyclerview.adapter = messageAdapter
-                    }else{
-                        messageAdapter!!.notifyDataSetChanged()
+                    if(lastMsg.text != null){
+                        viewedList.add(lastMsg)
                     }
+
+
+                    Log.w("viewed", viewedList.toString())
+                    if(viewedList.size != 0){
+                        if(messageAdapter == null){
+                            messageAdapter = MessageAdapter(this@ChatMessage,viewedList,senderId)
+                            recyclerview.adapter = messageAdapter
+                        }else{
+                            messageAdapter!!.notifyDataSetChanged()
+                        }
+                    }
+
 
 
 
