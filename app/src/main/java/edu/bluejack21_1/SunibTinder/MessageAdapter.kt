@@ -6,7 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.util.rangeTo
 import androidx.recyclerview.widget.RecyclerView
+import org.w3c.dom.Text
 
 class MessageAdapter() : RecyclerView.Adapter<MessageAdapter.ViewHolder>() {
 
@@ -25,12 +27,15 @@ class MessageAdapter() : RecyclerView.Adapter<MessageAdapter.ViewHolder>() {
 
     class ViewHolder(view : View) : RecyclerView.ViewHolder(view){
         var text : TextView
+        var time : TextView
         init{
 
             text = itemView.findViewById<TextView>(R.id.text)
+            time = itemView.findViewById<TextView>(R.id.time)
         }
         fun join(m : Message){
             text.setText(m.text)
+            time.setText(m.date.toString().substring(m.date.toString().length-5, m.date.toString().length))
         }
     }
 
