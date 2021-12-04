@@ -34,7 +34,7 @@ class ChatMessage : AppCompatActivity() {
     private lateinit var sharedPref : SharedPrefConfig
     private lateinit var receiverId : String
     private lateinit var senderId : String
-    private lateinit var messageAdapter : MessageAdapter
+    private var messageAdapter : MessageAdapter? = null
     private lateinit var msgList : MutableList<Message>
     private lateinit var layout : LinearLayoutManager
     private lateinit var recyclerview : RecyclerView
@@ -50,12 +50,14 @@ class ChatMessage : AppCompatActivity() {
         receiverName = findViewById<TextView>(R.id.receiverName)
         receiverPicture = findViewById<ImageView>(R.id.receiverPicture)
         recyclerview = findViewById<RecyclerView>(R.id.recyclerView)
+        msgList = mutableListOf<Message>()
+//        senderId = ""
 
         val db = Firebase.database(dbUrl)
         rDb = db.reference
 
         receiverId = getIntent().getStringExtra("receiverId").toString()
-        val senderId = sharedPref.getString("Uid")
+        senderId = sharedPref.getString("Uid").toString()
 
         showReceiverProfile()
 
@@ -111,7 +113,7 @@ class ChatMessage : AppCompatActivity() {
 
                     }
                     if(messageAdapter != null){
-                        messageAdapter.notifyDataSetChanged()
+                        messageAdapter!!.notifyDataSetChanged()
                     }else{
                         messageAdapter = MessageAdapter(this@ChatMessage,msgList,senderId)
                         recyclerview.adapter = messageAdapter
