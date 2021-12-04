@@ -56,7 +56,7 @@ class ChatMessage : AppCompatActivity() {
     private lateinit var lastMsg : String
     private lateinit var oldestPostId : String
     var isLoading = false
-    var reduce = 2
+    var reduce = 5
     private lateinit var viewedList : MutableList<Message>
 
 
@@ -118,7 +118,7 @@ class ChatMessage : AppCompatActivity() {
                             until = 0
                         }else{
                             until = msgList.size-reduce-1
-                            reduce+=2
+                            reduce+=5
                         }
                         Log.w("bicj", msgList.size.toString() + " " + until.toString() + " reduce: " + reduce.toString())
                         for(i in msgList.size-1 downTo until){
@@ -132,10 +132,14 @@ class ChatMessage : AppCompatActivity() {
                             }else{
                                 messageAdapter!!.notifyDataSetChanged()
                             }
-                            recyclerview.smoothScrollToPosition(0)
+
+
                             Handler().postDelayed({
+                                recyclerview.smoothScrollToPosition(0)
                                 isLoading = false
-                            },2000)
+                                Log.w("done", "done delay")
+                            },300)
+
                         }
 
                     }
