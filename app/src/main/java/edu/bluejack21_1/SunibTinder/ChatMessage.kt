@@ -7,6 +7,7 @@ import android.media.Image
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.View
 import android.widget.*
@@ -53,6 +54,12 @@ class ChatMessage : AppCompatActivity() {
     private lateinit var emojiTab : String
     private lateinit var emojiTabLayout : LinearLayout
     private lateinit var lastMsg : String
+    private lateinit var oldestPostId : String
+    var isLoading = false
+    var reduce = 2
+    private lateinit var viewedList : MutableList<Message>
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat_message)
@@ -70,8 +77,10 @@ class ChatMessage : AppCompatActivity() {
         msgList = mutableListOf<Message>()
         storage = FirebaseStorage.getInstance()
         storageRef = storage.getReference()
+        viewedList = mutableListOf()
         emojiTab = "FALSE"
         lastMsg = ""
+        oldestPostId = ""
         val db = Firebase.database(dbUrl)
         rDb = db.reference
 
@@ -89,14 +98,51 @@ class ChatMessage : AppCompatActivity() {
         emojiBtn.setOnClickListener {
             handleEmojiTab()
         }
-        getLastMessage()
+//        getLastMessage()
         Log.w("lastmsg", lastMsg)
         setUpEmoji()
+
 
         layout = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
         layout.stackFromEnd = true
         recyclerview.layoutManager = layout
+        recyclerview.addOnScrollListener(object : RecyclerView.OnScrollListener() {
 
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                if(!isLoading){
+                    if(!recyclerView.canScrollVertically(-1)){
+                        viewedList.clear()
+                        isLoading = true
+                        var until = 0
+                        if(msgList.size - reduce - 1 < 0){
+                            until = 0
+                        }else{
+                            until = msgList.size-reduce-1
+                            reduce+=2
+                        }
+                        Log.w("bicj", msgList.size.toString() + " " + until.toString() + " reduce: " + reduce.toString())
+                        for(i in msgList.size-1 downTo until){
+                            viewedList.add(msgList.get(i))
+                        }
+                        viewedList.reverse()
+                        if(until != 0){
+                            if(messageAdapter == null){
+                                messageAdapter = MessageAdapter(this@ChatMessage,viewedList,senderId)
+                                recyclerview.adapter = messageAdapter
+                            }else{
+                                messageAdapter!!.notifyDataSetChanged()
+                            }
+                            recyclerview.smoothScrollToPosition(0)
+                            Handler().postDelayed({
+                                isLoading = false
+                            },2000)
+                        }
+
+                    }
+                }
+
+            }
+        })
 
 
         readMessage()
@@ -105,36 +151,36 @@ class ChatMessage : AppCompatActivity() {
 
     }
 
-    private fun getLastMessage(){
-
-
-        try {
-            rDb.child("Message").addValueEventListener(object : ValueEventListener{
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    for(snap in snapshot.children){
-                        val msg = snap.getValue(Message::class.java)
-                        if(msg != null){
-                            if(msg.senderId.equals(senderId) && msg.receiverId.equals(receiverId)
-                                || msg?.senderId.equals(receiverId) && msg?.receiverId.equals(senderId)
-                            ){
-                                lastMsg = msg.text.toString()
-                            }
-                        }
-
-                    }
-
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                    TODO("Not yet implemented")
-                }
-            })
-            Log.w("lastmsg", lastMsg)
-        }catch (e : Exception){
-            e.printStackTrace()
-        }
-
-    }
+//    private fun getLastMessage(){
+//
+//
+//        try {
+//            rDb.child("Message").addValueEventListener(object : ValueEventListener{
+//                override fun onDataChange(snapshot: DataSnapshot) {
+//                    for(snap in snapshot.children){
+//                        val msg = snap.getValue(Message::class.java)
+//                        if(msg != null){
+//                            if(msg.senderId.equals(senderId) && msg.receiverId.equals(receiverId)
+//                                || msg?.senderId.equals(receiverId) && msg?.receiverId.equals(senderId)
+//                            ){
+//                                lastMsg = msg.text.toString()
+//                            }
+//                        }
+//
+//                    }
+//
+//                }
+//
+//                override fun onCancelled(error: DatabaseError) {
+//                    TODO("Not yet implemented")
+//                }
+//            })
+//            Log.w("lastmsg", lastMsg)
+//        }catch (e : Exception){
+//            e.printStackTrace()
+//        }
+//
+//    }
 
 
     private fun setUpEmoji(){
@@ -247,6 +293,7 @@ class ChatMessage : AppCompatActivity() {
             rDb.child("Message").addValueEventListener(object : ValueEventListener{
                 override fun onDataChange(snapshot: DataSnapshot) {
                     msgList.clear()
+                    var lastMsg : Message = Message()
                     for(snap in snapshot.children){
                         val msg = snap.getValue(Message::class.java)
                         if(msg != null){
@@ -254,13 +301,22 @@ class ChatMessage : AppCompatActivity() {
                                     || msg?.senderId.equals(receiverId) && msg?.receiverId.equals(senderId)
                             ){
                                 msgList.add(msg)
+                                lastMsg = msg
+
                             }
                         }
 
                     }
+                    viewedList.add(lastMsg)
 
-                    messageAdapter = MessageAdapter(this@ChatMessage,msgList,senderId)
-                    recyclerview.adapter = messageAdapter
+                    if(messageAdapter == null){
+                        messageAdapter = MessageAdapter(this@ChatMessage,viewedList,senderId)
+                        recyclerview.adapter = messageAdapter
+                    }else{
+                        messageAdapter!!.notifyDataSetChanged()
+                    }
+
+
 
                 }
 

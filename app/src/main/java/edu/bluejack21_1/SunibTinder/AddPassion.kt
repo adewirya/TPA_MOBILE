@@ -72,15 +72,22 @@ class AddPassion : AppCompatActivity() {
         }
 
         passionDoneBtn.setOnClickListener {
+
             var index = 0
+            var count = 0
             var selected = ""
             for(b in checkList){
                 if(b){
                     listOfPassion.add(passionList.get(index).toString())
                     selected += passionList.get(index).toString() + ","
+                    count++
                 }
 
                 index++
+            }
+            if(count > 3){
+                Toast.makeText(this, "Passions must be less than or equals to 3", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
             }
             selected = selected.dropLast(1)
 //            Toast.makeText(this, selected, Toast.LENGTH_SHORT).show()

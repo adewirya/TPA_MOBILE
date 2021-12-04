@@ -5,11 +5,14 @@ import android.app.PendingIntent
 import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.Typeface
 import android.net.Uri
 import android.os.Bundle
 import android.os.ProxyFileDescriptorCallback
 import android.transition.Slide
 import android.util.Log
+import android.util.TypedValue
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -61,7 +64,7 @@ class fragment_suggested : Fragment() {
     private lateinit var listOfLikes : MutableList<String>
     private lateinit var listOfUnlikes : MutableList<String>
     private lateinit var listOfMatches : MutableList<String>
-
+    private lateinit var passionLayout : LinearLayout
     val limit : Long = 2
 
     private var currIdx : Long = 0
@@ -109,8 +112,13 @@ class fragment_suggested : Fragment() {
         val btnNo = binding.btnNo
         val btnYes = binding.btnYes
         val btnInfo = binding.btnInfo
+<<<<<<< HEAD
 
         setAlarm()
+=======
+        passionLayout = binding.passionLayout
+
+>>>>>>> 6f5f8ad7ac92e0cb2a029b895abdcb0763c8d845
 
         getData {
             es->
@@ -453,6 +461,35 @@ class fragment_suggested : Fragment() {
             bio.text = e["Bio"].toString()
             age.text = e["Age"].toString()
             location.text = e["Location"].toString()
+
+            var passions : List<String>
+
+            if (e["Passion"] != null){
+                passions = e["Passion"] as List<String>
+                var passionTitle : TextView = TextView(this.context)
+                passionTitle.setText("Passions: ")
+                passionTitle.setTypeface(Typeface.DEFAULT_BOLD)
+                passionTitle.setTextColor(Color.parseColor("#FFFFFF"))
+                passionTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12.0F)
+                val layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,  LinearLayout.LayoutParams.WRAP_CONTENT)
+                layoutParams.setMargins(30,0, 10, 0)
+
+                passionLayout.addView(passionTitle, layoutParams)
+                for(p in passions){
+                    var passion : TextView = TextView(this.context)
+                    passion.setText(p.toString())
+                    passion.setTextColor(Color.parseColor("#FFFFFF"))
+                    passionTitle.setTypeface(Typeface.DEFAULT_BOLD)
+                    passion.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12.0F)
+                    val layoutParams1 = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,  LinearLayout.LayoutParams.WRAP_CONTENT)
+                    layoutParams1.setMargins(5,0, 5, 0)
+
+                    passionLayout.addView(passion, layoutParams1)
+
+                }
+
+            }
+
 
 
 
