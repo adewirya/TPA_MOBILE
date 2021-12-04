@@ -7,8 +7,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
+import android.widget.LinearLayout
 import androidx.navigation.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -41,6 +44,9 @@ class fragment_chat : Fragment() {
     private lateinit var docId : String
     private lateinit var pp: ImageView
     private lateinit var matchList : List<String>
+
+    private lateinit var recyclerView: RecyclerView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -80,28 +86,46 @@ class fragment_chat : Fragment() {
         }
 
 
+        recyclerView = binding.root.findViewById(
+            R.id.recyclerView
+        )
+
+        recyclerView?.layoutManager = LinearLayoutManager(activity)
+        val adapter = BimbingAdapter()
+
+
+
+        // list img
+        // listdocids
+        // listmsg
+        // listname
+
         return v!!.root
     }
 
-    class RecyclerAdapter : RecyclerView.Adapter<RecyclerAdapter.RecyclerViewHolder>(){
 
-        class RecyclerViewHolder(v : View) : RecyclerView.ViewHolder(v){
-
-        }
-
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerViewHolder {
-            return RecyclerViewHolder(LayoutInflater)
-        }
-
-        override fun onBindViewHolder(holder: RecyclerViewHolder, position: Int) {
-            TODO("Not yet implemented")
-        }
-
-        override fun getItemCount(): Int {
-            TODO("Not yet implemented")
-        }
-
-    }
+//
+//    class RecyclerAdapter(val activity: Home ) : RecyclerView.Adapter<RecyclerAdapter.RecyclerViewHolder>(){
+//
+//
+//        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerViewHolder {
+//            return RecyclerViewHolder(LayoutInflater.from(activity).inflate(R.layout.rv_child_chat,parent,false))
+//        }
+//
+//        override fun onBindViewHolder(holder: RecyclerViewHolder, position: Int) {
+//            holder.chatObj.text = activity.chatList[position]
+//        }
+//
+//        override fun getItemCount(): Int {
+//            return activity.chatList.size
+//        }
+//
+//
+//        class RecyclerViewHolder(v : View) : RecyclerView.ViewHolder(v){
+//            val chatObj = v.findViewById<Button>(R.id.chatComponent)
+//        }
+//
+//    }
 
     companion object {
         /**
