@@ -60,6 +60,7 @@ class fragment_chat : Fragment() {
 
     private fun getData(callback : (Boolean) -> Unit){
         var imageUrl : Uri
+        var ctr = 0
         db.collection("users").document(docId).get().addOnSuccessListener {
                 e ->
             imageUrl = Uri.parse(e["Profile"].toString())
@@ -69,21 +70,21 @@ class fragment_chat : Fragment() {
                 matchList = e["Match"] as List<String>
             }
 
+        }.addOnCompleteListener{
             for (i in matchList){
                 db.collection("users").document(i).get().addOnSuccessListener {
                         e->
-//                    Log.w("teshoho", "hoh " + e["Profile"].toString())
                     listName.add(e["FullName"].toString())
                     listMsg.add(e["FullName"].toString())
                     val temp = e["Profile"].toString()
                     listUrl.add(temp)
-                }.addOnCompleteListener{
-                    callback(true)
+                    ctr += 1
+                    if (ctr == matchList.size){
+                        callback(true)
+                    }
                 }
             }
-
         }
-
     }
 
     override fun onCreateView(
@@ -109,7 +110,7 @@ class fragment_chat : Fragment() {
 
         getData { e->
             if (e){
-//                Log.w("teshoho" , "$listUrl $listName")
+                Log.w("teshoho" , "$matchList  asdsa $listName")
                 recyclerView = binding.recyclerView
 
                 recyclerView.layoutManager = LinearLayoutManager(activity)

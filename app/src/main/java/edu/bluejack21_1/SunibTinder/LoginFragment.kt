@@ -94,7 +94,6 @@ class LoginFragment : Fragment() {
                     if (sse){
                         activity?.let{
                             val intent = Intent (it, Home::class.java)
-//                            intent.putExtra("receiverId","7O4Wit0w2dwhvbspbCKy")
                             it.startActivity(intent)
                         }
                     }
@@ -332,15 +331,8 @@ class LoginFragment : Fragment() {
                         sharedPref.putString("FullName", personName)
                         sharedPref.putString("Email", personEmail)
                         sharedPref.putBoolean("IsGoogle",true)
-                        sharedPref.putString("Uid", "7O4Wit0w2dwhvbspbCKy")
                         activity?.let{
                             val intent = Intent (it, Home::class.java)
-                            it.startActivity(intent)
-                        }
-
-                        activity?.let{
-                            val intent = Intent (it, ChatMessage::class.java)
-                            intent.putExtra("receiverId","5BQeQI0ta2kXLlIOxXQj")
                             it.startActivity(intent)
                         }
 
