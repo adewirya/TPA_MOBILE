@@ -120,11 +120,17 @@ class fragment_chat : Fragment() {
         var imageUrl : Uri
         db.collection("users").document(docId).get().addOnSuccessListener {
                 e ->
-            imageUrl = Uri.parse(e["Profile"].toString())
-            Picasso.get().load(imageUrl).into(pp)
-            pd.setMessage("Percentage : 25%")
-            if (e["Match"] != null){
-                matchList = e["Match"] as List<String>
+//            if (){
+            Log.e("bimbing", e["Match"].toString())
+                imageUrl = Uri.parse(e["Profile"].toString())
+                Picasso.get().load(imageUrl).into(pp)
+                pd.setMessage("Percentage : 25%")
+                if (e["Match"].toString() != ""){
+                    matchList = e["Match"] as List<String>
+                }
+//            }
+            if (e == null){
+                callback(false)
             }
         }.addOnCompleteListener{
             if (matchList.isEmpty()){
@@ -137,34 +143,37 @@ class fragment_chat : Fragment() {
     }
 
     private fun getData(startPoint : Int, endPoint : Int, callback : (Boolean) -> Unit){
-        pd.setTitle("Getting Data")
-        pd.setMessage("Percentage : 0%")
-        pd.show()
 
-        var endPoints = endPoint
+        if (matchList.size > 0 && matchList[0] != "" ){
+            pd.setTitle("Getting Data")
+            pd.setMessage("Percentage : 0%")
+            pd.show()
 
-        if (matchList.isNotEmpty()){
-            if (endPoints > matchList.size-1){
-                endPoints = matchList.size-1
-            }
-        }
+            var endPoints = endPoint
 
-        pd.setMessage("Percentage : 50%")
-            val temp = mutableListOf<String>()
-        (startPoint..endPoints).forEach{
-
-            db.collection("users").document(matchList[it]).get().addOnSuccessListener { e->
-                if (it == endPoints){
-                    callback(true)
+            if (matchList.isNotEmpty()){
+                if (endPoints > matchList.size-1){
+                    endPoints = matchList.size-1
                 }
-                getLastMessage(matchList[it])
-                listUrl.add(e["Profile"].toString())
-                Log.w("datahehe2", listUrl.toString())
             }
-        }
+
+            pd.setMessage("Percentage : 50%")
+            val temp = mutableListOf<String>()
+            (startPoint..endPoints).forEach{
+//                Log.e("bimbing", matchList[it])
+                db.collection("users").document(matchList[it]).get().addOnSuccessListener { e->
+                    if (it == endPoints){
+                        callback(true)
+                    }
+                    getLastMessage(matchList[it])
+                    listUrl.add(e["Profile"].toString())
+                    Log.w("datahehe2", listUrl.toString())
+                }
+            }
 
 
             pd.setMessage("Percentage : 75%")
+        }
     }
 
     override fun onCreateView(
@@ -292,7 +301,7 @@ class fragment_chat : Fragment() {
 
     }
 
-    companion object {
+    companion object  {
         /**
          * Use this factory method to create a new instance of
          * this fragment using the provided parameters.
