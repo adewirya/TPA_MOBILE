@@ -42,7 +42,7 @@ class   EditInfo : AppCompatActivity() {
     private lateinit var img2 : ImageView
     private lateinit var img3 : ImageView
     private lateinit var img4 : ImageView
-
+    private lateinit var previewBtn : Button
     private lateinit var pd : ProgressDialog
 
     private var bol1 : Boolean = false
@@ -87,6 +87,7 @@ class   EditInfo : AppCompatActivity() {
         passionTextView = findViewById<TextView>(R.id.passionTextView)
         doneBtn = findViewById<Button>(R.id.doneEditBtn)
         doneBtn2 = findViewById<Button>(R.id.doneInfoBtn)
+        previewBtn = findViewById<Button>(R.id.previewBtn)
         addPassionBtn = findViewById<Button>(R.id.addPassionBtn)
         img1 = findViewById<ImageView>(R.id.imageView)
         img2 = findViewById<ImageView>(R.id.imageView2)
@@ -127,6 +128,11 @@ class   EditInfo : AppCompatActivity() {
         img4.setOnClickListener{
             choosePicture(4)
 
+        }
+        previewBtn.setOnClickListener {
+            var i : Intent = Intent(this, OtherProfile::class.java)
+            i.putExtra("Uid", sharedPref.getString("Uid"))
+            startActivity(i)
         }
 
         ArrayAdapter.createFromResource(

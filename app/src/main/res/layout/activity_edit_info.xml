@@ -528,12 +528,27 @@
 
         </androidx.cardview.widget.CardView>
 
+
+        <Button
+            android:id="@+id/previewBtn"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="40dp"
+            android:layout_marginEnd="24dp"
+            android:background="@color/White"
+            android:text="PREVIEW"
+            android:textColor="@color/MainColor"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cardView17" />
+
         <Button
             android:id="@+id/doneEditBtn"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="20dp"
             android:layout_marginEnd="24dp"
             android:layout_marginBottom="40dp"
             android:background="@color/White"
@@ -542,7 +557,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cardView17" />
-
+            app:layout_constraintTop_toBottomOf="@+id/previewBtn" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
