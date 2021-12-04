@@ -53,6 +53,8 @@ class ChatMessage : AppCompatActivity() {
     private lateinit var emojiTab : String
     private lateinit var emojiTabLayout : LinearLayout
     private lateinit var lastMsg : String
+    private lateinit var oldestPostId : String
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat_message)
@@ -72,6 +74,7 @@ class ChatMessage : AppCompatActivity() {
         storageRef = storage.getReference()
         emojiTab = "FALSE"
         lastMsg = ""
+        oldestPostId = ""
         val db = Firebase.database(dbUrl)
         rDb = db.reference
 
@@ -93,10 +96,40 @@ class ChatMessage : AppCompatActivity() {
         Log.w("lastmsg", lastMsg)
         setUpEmoji()
 
+        rDb.limitToFirst(3).addListenerForSingleValueEvent(object : ValueEventListener{
+
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for(snap in snapshot.children){
+                    val msg = snap.getValue(Message::class.java)
+                    if(msg != null){
+                        if(msg.senderId.equals(senderId) && msg.receiverId.equals(receiverId)
+                            || msg?.senderId.equals(receiverId) && msg?.receiverId.equals(senderId)
+                        ){
+
+                            lastMsg = msg.text.toString()
+                        }
+                    }
+
+                }
+
+            }
+
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+
+        })
+
         layout = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
         layout.stackFromEnd = true
         recyclerview.layoutManager = layout
+        recyclerview.addOnScrollListener(object : RecyclerView.OnScrollListener() {
 
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+
+            }
+        })
 
 
         readMessage()
@@ -254,6 +287,7 @@ class ChatMessage : AppCompatActivity() {
                                     || msg?.senderId.equals(receiverId) && msg?.receiverId.equals(senderId)
                             ){
                                 msgList.add(msg)
+
                             }
                         }
 

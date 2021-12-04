@@ -21,6 +21,7 @@ class MessageAdapter() : RecyclerView.Adapter<MessageAdapter.ViewHolder>() {
     val sentMsg = 0
     val receivedMsg = 1
 
+
     constructor(ctx : Context, msgs : List<Message>, currUid : String) : this() {
         context = ctx
         msgList = msgs
