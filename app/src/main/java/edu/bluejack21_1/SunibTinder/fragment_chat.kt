@@ -1,5 +1,6 @@
 package edu.bluejack21_1.SunibTinder
 
+import android.app.ProgressDialog
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -10,9 +11,13 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.gms.tasks.Task
+import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
@@ -49,6 +54,38 @@ class fragment_chat : Fragment() {
     private lateinit var listMsg : MutableList<String>
 
     private lateinit var recyclerView: RecyclerView
+    private lateinit var pd : ProgressDialog
+
+    private lateinit var chatSnapshot : QuerySnapshot
+    private lateinit var chatTask : Task<QuerySnapshot>
+
+    private fun addRange(
+        newUrls : MutableList<String>,
+        newName : MutableList<String>,
+        newMsg : MutableList<String>,
+        adapter : RecyclerView.Adapter<*>
+    ){
+        val size = newUrls.size
+        if (newUrls.size == 0){
+            adapter.notifyItemChanged(size)
+        } else{
+            listUrl.addAll(newUrls)
+            listName.addAll(newName)
+            listMsg.addAll(newName)
+            adapter.notifyItemChanged(size)
+            adapter.notifyItemRangeInserted(size+1, newUrls.size - 1)
+        }
+    }
+
+    private fun loadNewItem(adapter : RecyclerView.Adapter<*>){
+        if (::chatTask.isInitialized && !chatTask.isComplete || ::chatSnapshot.isInitialized && chatSnapshot.isEmpty){
+            return
+        }
+
+        viewLifecycleOwner.lifecycleScope.launchWhenCreated {
+            var query = db.collection("users").document(docId)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,33 +96,40 @@ class fragment_chat : Fragment() {
     }
 
     private fun getData(callback : (Boolean) -> Unit){
+        pd.setTitle("Getting Data")
+        pd.setMessage("Percentage : 0%")
+        pd.show()
         var imageUrl : Uri
         var ctr = 0
         db.collection("users").document(docId).get().addOnSuccessListener {
                 e ->
             imageUrl = Uri.parse(e["Profile"].toString())
             Picasso.get().load(imageUrl).into(pp)
-
+            pd.setMessage("Percentage : 25%")
             if (e["Match"] != null){
                 matchList = e["Match"] as List<String>
             }
 
         }.addOnCompleteListener{
-            for (i in matchList){
-                db.collection("users").document(i).get().addOnSuccessListener {
+
+            pd.setMessage("Percentage : 50%")
+            for (i in 0..4 ){
+                db.collection("users").document(matchList[i]).get().addOnSuccessListener {
                         e->
-                    listName.add(e["FullName"].toString())
-                    listMsg.add(e["FullName"].toString())
                     listUrl.add(e["Profile"].toString())
                     ctr += 1
-                    if (ctr == matchList.size){
+                    if (ctr == 5){
                         callback(true)
                     }
                 }
             }
+            pd.setMessage("Percentage : 75%")
         }
     }
 
+    private fun loadData(){
+
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -97,6 +141,7 @@ class fragment_chat : Fragment() {
         // Inflate the layout for this fragment
         v = FragmentChatBinding.inflate(inflater, container, false)
         pp = binding.imageView8
+        pd = ProgressDialog(this.requireContext())
 
         listUrl = mutableListOf<String>()
         listMsg = mutableListOf<String>()
@@ -109,7 +154,7 @@ class fragment_chat : Fragment() {
 
         getData { e->
             if (e){
-                Log.w("teshoho" , "$matchList  asdsa $listName")
+                Log.w("teshoho" , "$listUrl, ${listUrl.size} ")
                 recyclerView = binding.recyclerView
 
                 recyclerView.layoutManager = LinearLayoutManager(activity)
@@ -117,12 +162,13 @@ class fragment_chat : Fragment() {
 
                 adapter.listDocIds = matchList as MutableList<String>
                 adapter.listImgUrl = listUrl
-                adapter.listName = listName
-                adapter.listMsg = listMsg
 
                 recyclerView.adapter = adapter
+                pd.setMessage("Percentage : 100%")
+                pd.dismiss()
             }
         }
+
 
 
         return v!!.root

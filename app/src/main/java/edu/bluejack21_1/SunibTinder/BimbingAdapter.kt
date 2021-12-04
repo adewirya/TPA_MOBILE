@@ -20,10 +20,13 @@ class BimbingAdapter() : RecyclerView.Adapter<BimbingAdapter.ViewHolder>() {
 
     val db = Firebase.firestore
 
+    val starts = 0
+    val limit = 5
+    val continueLoad = true
 
     lateinit var adapter: BimbingAdapter
-    var listName : MutableList<String> = mutableListOf<String>()
-    var listMsg : MutableList<String> = mutableListOf<String>()
+//    var listName : MutableList<String> = mutableListOf<String>()
+//    var listMsg : MutableList<String> = mutableListOf<String>()
     var listImgUrl : MutableList<String> = mutableListOf<String>()
     var listDocIds : MutableList<String> = mutableListOf<String>()
 
@@ -34,14 +37,21 @@ class BimbingAdapter() : RecyclerView.Adapter<BimbingAdapter.ViewHolder>() {
         return ViewHolder(v)
     }
 
-
-
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+
+//        if (listImgUrl[position])
         Picasso.get().load(listImgUrl[position]).into(holder.imgView)
-        holder.msg.text = listMsg[position]
-        holder.senderTitle.text = listName[position]
-        holder.ids.text = listDocIds[position]
-        holder.ids.visibility = View.INVISIBLE
+
+        db.collection("users").document(listDocIds[position]).get()
+            .addOnSuccessListener {
+                e->
+                holder.msg.text =  e["FullName"].toString()
+                holder.senderTitle.text = e["FullName"].toString()
+                holder.ids.text = listDocIds[position]
+                holder.ids.visibility = View.INVISIBLE
+
+                Log.w("teshoho", holder.senderTitle.text.toString())
+            }
     }
 
     override fun getItemCount(): Int {
