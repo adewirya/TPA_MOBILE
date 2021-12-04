@@ -42,6 +42,8 @@ class fragment_profile : Fragment() {
     private var param2: String? = null
     private lateinit var imageUri : Uri
 
+    val pd : ProgressDialog = ProgressDialog(this.requireContext())
+
     private lateinit var imageView : ImageView
 
 
@@ -86,15 +88,19 @@ class fragment_profile : Fragment() {
         var imageUrl : Uri
         imageUrl = Uri.parse("")
 
-
+        pd.setTitle("Getting Data")
+        pd.setMessage("Getting Data from database.")
+        pd.show()
         db.collection("users").document(docId).get().addOnSuccessListener {
             e ->
             val arr : List<String> = e["Carousel"] as List<String>
             imageUrl = Uri.parse(arr[0])
             Picasso.get().load(imageUrl).into(imageView)
+            pd.setMessage("Getting Data from database..")
 
             binding.textView2.setText(e["FullName"].toString() + ", ")
             binding.userAge.setText(e["Age"].toString())
+
 
             if (e["Location"].toString() == ""){
                 binding.userLocation.setText("Not Yet Defined")
@@ -108,8 +114,10 @@ class fragment_profile : Fragment() {
             else {
                 binding.textView5.setText(e["Bio"].toString())
             }
+            pd.setMessage("Getting Data from database...")
         }.addOnCompleteListener{
             db.collection("users").document(docId).update("Profile", imageUrl)
+            pd.dismiss()
         }
 
         imageView.setOnClickListener{

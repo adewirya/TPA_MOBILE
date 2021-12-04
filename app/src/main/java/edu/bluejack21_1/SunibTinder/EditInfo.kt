@@ -43,6 +43,8 @@ class   EditInfo : AppCompatActivity() {
     private lateinit var img3 : ImageView
     private lateinit var img4 : ImageView
 
+    val pd : ProgressDialog = ProgressDialog(this)
+
     private var bol1 : Boolean = false
     private var bol2 : Boolean = false
     private var bol3 : Boolean = false
@@ -164,6 +166,7 @@ class   EditInfo : AppCompatActivity() {
     }
 
     private fun clearImg(callback: (Boolean) -> Unit){
+        pd.setMessage("Sorting Images Datas..")
         img1.setImageURI(Uri.parse(""))
         img2.setImageURI(Uri.parse(""))
         img3.setImageURI(Uri.parse(""))
@@ -176,9 +179,13 @@ class   EditInfo : AppCompatActivity() {
     }
 
     private fun shiftImg(){
+        pd.setTitle("Sorting Images")
+        pd.setMessage("Sorting Images Datas.")
+        pd.show()
         clearImg {
             e->
             if (e){
+                pd.setMessage("Sorting Images Datas...")
                 if (listOfUrl.getOrNull(0) != null && listOfUrl.getOrNull(0) != ""){
                     Picasso.get().load(listOfUrl[0]).into(img1)
                     btn1.visibility = View.VISIBLE
@@ -210,7 +217,7 @@ class   EditInfo : AppCompatActivity() {
                 else {
                     btn4.visibility = View.INVISIBLE
                 }
-
+                pd.dismiss()
             }
         }
     }
@@ -239,8 +246,6 @@ class   EditInfo : AppCompatActivity() {
             imageUrl4 = Uri.parse("")
 
         }
-
-//        Log.w("tess", "before :  $listOfUrl")
 
         listOfUrl[RequestCode-1] = ""
 //        Log.w("tess", listOfUrl.toString())
@@ -371,7 +376,11 @@ class   EditInfo : AppCompatActivity() {
     }
 
     private fun setDefaultValues(){
+        pd.setTitle("Getting Data from Database")
+        pd.setMessage("Getting User's Info.")
+        pd.show()
         db.collection("users").document(uId).get().addOnSuccessListener { e ->
+            pd.setMessage("Getting User's Info..")
             nameTxtField.setText(e["FullName"].toString())
             aliasTxtField.setText(e["Alias"].toString())
             bioTxtField.setText(e["Bio"].toString())
@@ -393,6 +402,8 @@ class   EditInfo : AppCompatActivity() {
                 passionTextView.setText(passionStr)
             }
 
+            pd.setMessage("Getting User's Info...")
+
             val picts : List<String> = e["Carousel"] as List<String>
             var idx : Int = 0
             for (i in picts){
@@ -402,6 +413,7 @@ class   EditInfo : AppCompatActivity() {
                 }
             }
 //            img1.setImageURI(Uri.parse(picts[0]))
+            pd.setMessage("Getting User's Info....")
 
             if (picts.getOrNull(0) != null  && picts.getOrNull(0) != ""){
                 Picasso.get().load(picts[0]).into(img1)
@@ -438,7 +450,7 @@ class   EditInfo : AppCompatActivity() {
                 btn4.visibility = View.INVISIBLE
             }
 
-
+            pd.show()
         }
     }
 

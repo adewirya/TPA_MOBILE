@@ -1,5 +1,6 @@
 package edu.bluejack21_1.SunibTinder
 
+import android.app.ProgressDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -59,6 +60,8 @@ class fragment_suggested : Fragment() {
     val limit : Long = 2
 
     private var currIdx : Long = 0
+
+    val pd : ProgressDialog = ProgressDialog(this.requireContext())
 
     private lateinit var fullName : String
     private lateinit var location : String
@@ -137,19 +140,28 @@ class fragment_suggested : Fragment() {
 
     private fun getData(callback: (Boolean) -> Unit){
 
+        pd.setTitle("Getting Data")
+        pd.show()
+
         db.collection("users").document(docId).get().addOnSuccessListener {
             e->
             if (e["Likes"] != null) {
                 listOfLikes = e["Likes"] as MutableList<String>
             }
 
+            pd.setMessage("Getting Liked User.")
+
             if (e["Unlikes"] != null ){
                 listOfUnlikes = e["Unlikes"] as MutableList<String>
             }
 
+            pd.setMessage("Getting Unliked User..")
+
             if (e["Match"] != null) {
                 listOfMatches = e["Match"] as MutableList<String>
             }
+
+            pd.setMessage("Getting Matched User...")
 
         }.addOnCompleteListener{
             callback(true)
@@ -181,12 +193,13 @@ class fragment_suggested : Fragment() {
         Log.w("teshaha", "search gender : ${searchGender} location : ${location}")
 
         var size : Int = 0
-
+        pd.setMessage("Getting Suggested User.")
         db.collection("users").get().addOnSuccessListener {
             e->
             size = e.size()
+            pd.setMessage("Getting Suggested User..")
         }.addOnCompleteListener{
-
+            pd.setMessage("Getting Suggested User...")
             val startAt = Math.ceil(Random.nextDouble(0.0,1.0) * size).toInt()
 
             Log.w("teshehe", startAt.toString())
@@ -374,7 +387,7 @@ class fragment_suggested : Fragment() {
         val slider = binding.imageSliderSuggested
 
         val list = mutableListOf<SlideModel>()
-
+        pd.setMessage("Assigning to slider")
         getData(documentId) {
                 e->
             if (e){
@@ -382,8 +395,10 @@ class fragment_suggested : Fragment() {
                     list.add(SlideModel(i))
                 }
                 slider.setImageList(list,true)
+                pd.dismiss()
             }
         }
+
     }
 
     private fun getData(documentId : String, callback: (Boolean) -> Unit){

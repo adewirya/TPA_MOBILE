@@ -22,9 +22,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-//        binding = ActivityMainBinding.inflate(layoutInflater)
-
-
         setContentView(R.layout.login_page)
 
         val viewPager = findViewById<ViewPager>(R.id.viewPager)
