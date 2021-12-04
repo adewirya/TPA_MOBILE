@@ -144,6 +144,47 @@
                         tools:srcCompat="@tools:sample/avatars" />
                 </androidx.cardview.widget.CardView>
 
+                <Button
+                    android:id="@+id/btnDel1"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="@drawable/suggested_no_24"
+                    android:backgroundTint="@color/White"
+                    app:layout_constraintEnd_toEndOf="@+id/cardView3"
+                    app:layout_constraintStart_toStartOf="@+id/cardView3"
+                    app:layout_constraintTop_toBottomOf="@+id/cardView3" />
+
+                <Button
+                    android:id="@+id/btnDel2"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="@drawable/suggested_no_24"
+                    android:backgroundTint="@color/White"
+                    app:layout_constraintEnd_toEndOf="@+id/cardView4"
+                    app:layout_constraintStart_toStartOf="@+id/cardView4"
+                    app:layout_constraintTop_toBottomOf="@+id/cardView4" />
+
+                <Button
+                    android:id="@+id/btnDel4"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="@drawable/suggested_no_24"
+                    android:backgroundTint="@color/White"
+                    app:layout_constraintEnd_toEndOf="@+id/cardView6"
+                    app:layout_constraintStart_toStartOf="@+id/cardView6"
+                    app:layout_constraintTop_toBottomOf="@+id/cardView6" />
+
+                <Button
+                    android:id="@+id/btnDel3"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="@drawable/suggested_no_24"
+                    android:backgroundTint="@color/White"
+                    app:layout_constraintEnd_toEndOf="@+id/cardView5"
+                    app:layout_constraintHorizontal_bias="0.477"
+                    app:layout_constraintStart_toStartOf="@+id/cardView5"
+                    app:layout_constraintTop_toBottomOf="@+id/cardView5" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </RelativeLayout>

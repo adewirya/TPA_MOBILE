@@ -7,6 +7,7 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.*
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.firestore.ktx.firestore
@@ -52,6 +53,11 @@ class   EditInfo : AppCompatActivity() {
     private lateinit var imageUrl4 : Uri
     private lateinit var listOfUrl : MutableList<String>
 
+    private lateinit var btn1 : Button
+    private lateinit var btn2 : Button
+    private lateinit var btn3 : Button
+    private lateinit var btn4 : Button
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_info)
@@ -59,7 +65,11 @@ class   EditInfo : AppCompatActivity() {
         storage = FirebaseStorage.getInstance()
         storageRef = storage.getReference()
 
-        listOfUrl = mutableListOf<String>()
+        listOfUrl = MutableList(5){
+            it -> ""
+        }
+//        Log.w("tess", listOfUrl.toString())
+
 
 
         sharedPref = SharedPrefConfig(this)
@@ -78,6 +88,11 @@ class   EditInfo : AppCompatActivity() {
         img2 = findViewById<ImageView>(R.id.imageView2)
         img3 = findViewById<ImageView>(R.id.imageView3)
         img4 = findViewById<ImageView>(R.id.imageView4)
+
+        btn1 = findViewById<Button>(R.id.btnDel1)
+        btn2 = findViewById<Button>(R.id.btnDel2)
+        btn3 = findViewById<Button>(R.id.btnDel3)
+        btn4 = findViewById<Button>(R.id.btnDel4)
 
         uId = sharedPref.getString("Uid").toString()
 
@@ -102,6 +117,7 @@ class   EditInfo : AppCompatActivity() {
 
         img3.setOnClickListener{
             choosePicture(3)
+
         }
 
         img4.setOnClickListener{
@@ -126,6 +142,114 @@ class   EditInfo : AppCompatActivity() {
         addPassionBtn.setOnClickListener{
             startActivity(Intent(this, AddPassion::class.java))
         }
+
+
+        btn1.setOnClickListener{
+            delPict(1)
+        }
+
+        btn2.setOnClickListener{
+            delPict(2)
+        }
+
+        btn3.setOnClickListener{
+
+            delPict(3)
+        }
+
+        btn4.setOnClickListener{
+
+            delPict(4)
+        }
+    }
+
+    private fun clearImg(callback: (Boolean) -> Unit){
+        img1.setImageURI(Uri.parse(""))
+        img2.setImageURI(Uri.parse(""))
+        img3.setImageURI(Uri.parse(""))
+        img4.setImageURI(Uri.parse(""))
+        btn1.visibility = View.INVISIBLE
+        btn2.visibility = View.INVISIBLE
+        btn3.visibility = View.INVISIBLE
+        btn4.visibility = View.INVISIBLE
+        callback(true)
+    }
+
+    private fun shiftImg(){
+        clearImg {
+            e->
+            if (e){
+                if (listOfUrl.getOrNull(0) != null && listOfUrl.getOrNull(0) != ""){
+                    Picasso.get().load(listOfUrl[0]).into(img1)
+                    btn1.visibility = View.VISIBLE
+                }
+                else {
+                    btn1.visibility = View.INVISIBLE
+                }
+
+                if (listOfUrl.getOrNull(1) != null && listOfUrl.getOrNull(1) != ""){
+                    Picasso.get().load(listOfUrl[1]).into(img2)
+                    btn2.visibility = View.VISIBLE
+                }
+                else {
+                    btn2.visibility = View.INVISIBLE
+                }
+
+                if (listOfUrl.getOrNull(2) != null && listOfUrl.getOrNull(2) != ""){
+                    Picasso.get().load(listOfUrl[2]).into(img3)
+                    btn3.visibility = View.VISIBLE
+                }
+                else {
+                    btn3.visibility = View.INVISIBLE
+                }
+
+                if (listOfUrl.getOrNull(3) != null && listOfUrl.getOrNull(3) != ""){
+                    Picasso.get().load(listOfUrl[3]).into(img4)
+                    btn4.visibility = View.VISIBLE
+                }
+                else {
+                    btn4.visibility = View.INVISIBLE
+                }
+
+            }
+        }
+    }
+
+    private fun delPict(RequestCode: Int){
+        if (RequestCode == 1){
+            img1.setImageURI(Uri.parse(""))
+            btn1.visibility = View.INVISIBLE
+            imageUrl1 = Uri.parse("")
+        }
+        else if (RequestCode == 2){
+            img2.setImageURI(Uri.parse(""))
+            btn2.visibility = View.INVISIBLE
+            imageUrl2 = Uri.parse("")
+
+        }
+        else if (RequestCode == 3){
+            img3.setImageURI(Uri.parse(""))
+            btn3.visibility = View.INVISIBLE
+            imageUrl3 = Uri.parse("")
+
+        }
+        else if (RequestCode == 4){
+            img4.setImageURI(Uri.parse(""))
+            btn4.visibility = View.INVISIBLE
+            imageUrl4 = Uri.parse("")
+
+        }
+
+//        Log.w("tess", "before :  $listOfUrl")
+
+        listOfUrl[RequestCode-1] = ""
+//        Log.w("tess", listOfUrl.toString())
+        updatePicture{
+            e->
+            if (e){
+                shiftImg()
+            }
+        }
     }
 
     private fun choosePicture(RequestCode : Int) {
@@ -144,6 +268,7 @@ class   EditInfo : AppCompatActivity() {
             img1.setImageURI(imageUrl1)
             bol1 = true
             uploadPicture(1)
+            btn1.visibility = View.VISIBLE
         }
 
         else if (requestCode == 2 && resultCode == RESULT_OK && datas != null && datas.data != null) {
@@ -151,6 +276,7 @@ class   EditInfo : AppCompatActivity() {
             img2.setImageURI(imageUrl2)
             bol2 = true
             uploadPicture(2)
+            btn2.visibility = View.VISIBLE
         }
 
         else if (requestCode == 3 && resultCode == RESULT_OK && datas != null && datas.data != null) {
@@ -158,6 +284,7 @@ class   EditInfo : AppCompatActivity() {
             img3.setImageURI(imageUrl3)
             bol3 = true
             uploadPicture(3)
+            btn3.visibility = View.VISIBLE
         }
 
         else if (requestCode == 4 && resultCode == RESULT_OK && datas != null && datas.data != null) {
@@ -165,6 +292,7 @@ class   EditInfo : AppCompatActivity() {
             img4.setImageURI(imageUrl4)
             bol4 = true
             uploadPicture(4)
+            btn4.visibility = View.VISIBLE
         }
 
     }
@@ -205,11 +333,41 @@ class   EditInfo : AppCompatActivity() {
 
             if (progress.toInt() == 100){
                 storageReference.downloadUrl.addOnSuccessListener { e->
-                    listOfUrl[idx] = e.toString()
+                    listOfUrl.add(e.toString())
                     pd.dismiss()
+                    updatePicture{
+                        e->
+                        if (e){
+                            shiftImg()
+                        }
+                    }
                 }
             }
         }
+    }
+
+    private fun updatePicture(callback : (Boolean) -> Unit){
+        val docId = sharedPref.getString("Uid").toString()
+        val sortedList : MutableList<String> = mutableListOf<String>()
+
+        for ( i in listOfUrl){
+            if (i != ""){
+                sortedList.add(i)
+            }
+        }
+
+        listOfUrl.clear()
+        listOfUrl = sortedList
+
+//        Log.w("tess", listOfUrl.toString())
+
+        db.collection("users").document(docId)
+            .update("Carousel", sortedList).addOnSuccessListener {
+                e->
+
+            }.addOnCompleteListener{
+                callback(true)
+            }
     }
 
     private fun setDefaultValues(){
@@ -236,15 +394,50 @@ class   EditInfo : AppCompatActivity() {
             }
 
             val picts : List<String> = e["Carousel"] as List<String>
-
+            var idx : Int = 0
             for (i in picts){
-                listOfUrl.add(i)
+                if (i != ""){
+                    listOfUrl[idx] = i
+                    idx += 1
+                }
+            }
+//            img1.setImageURI(Uri.parse(picts[0]))
+
+            if (picts.getOrNull(0) != null  && picts.getOrNull(0) != ""){
+                Picasso.get().load(picts[0]).into(img1)
+            }
+            else {
+                btn1.visibility = View.INVISIBLE
             }
 
-            Picasso.get().load(picts[0]).into(img1)
-            Picasso.get().load(picts[1]).into(img2)
-            Picasso.get().load(picts[2]).into(img3)
-            Picasso.get().load(picts[3]).into(img4)
+            if (picts.getOrNull(1) != null  && picts.getOrNull(1) != ""){
+                Picasso.get().load(picts[1]).into(img2)
+            }
+            else {
+                btn2.visibility = View.INVISIBLE
+            }
+
+            if (picts.getOrNull(2) != null  && picts.getOrNull(2) != ""){
+                Picasso.get().load(picts[2]).into(img3)
+            }
+            else {
+                btn3.visibility = View.INVISIBLE
+            }
+
+            if (picts.getOrNull(3) != null  && picts.getOrNull(3) != ""){
+                Picasso.get().load(picts[3]).into(img4)
+            }
+            else {
+                btn4.visibility = View.INVISIBLE
+            }
+
+            if (picts.getOrNull(3) != null  && picts.getOrNull(3) != ""){
+                Picasso.get().load(picts[3]).into(img4)
+            }
+            else {
+                btn4.visibility = View.INVISIBLE
+            }
+
 
         }
     }

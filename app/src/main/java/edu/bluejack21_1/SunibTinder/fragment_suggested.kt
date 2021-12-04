@@ -139,26 +139,18 @@ class fragment_suggested : Fragment() {
 
         db.collection("users").document(docId).get().addOnSuccessListener {
             e->
-            if (e["Likes"] == null){
-                listOfLikes = mutableListOf<String>()
-            }
-            else {
+            if (e["Likes"] != null) {
                 listOfLikes = e["Likes"] as MutableList<String>
             }
 
-            if (e["Unlikes"] == null ){
-                listOfUnlikes = mutableListOf<String>()
-            }
-            else {
+            if (e["Unlikes"] != null ){
                 listOfUnlikes = e["Unlikes"] as MutableList<String>
             }
 
-            if (e["Match"] == null){
-                listOfMatches = mutableListOf<String>()
+            if (e["Match"] != null) {
+                listOfMatches = e["Match"] as MutableList<String>
             }
-            else {
-                listOfMatches = e["Matches"] as MutableList<String>
-            }
+
         }.addOnCompleteListener{
             callback(true)
         }
