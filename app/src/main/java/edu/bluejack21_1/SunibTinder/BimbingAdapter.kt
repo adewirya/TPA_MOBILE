@@ -33,25 +33,28 @@ class BimbingAdapter() : RecyclerView.Adapter<BimbingAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val v = LayoutInflater.from(parent.context).inflate(R.layout.rv_chat, parent , false)
-
+//        Log.w("teshoho", listImgUrl.toString())
         return ViewHolder(v)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        if (listImgUrl.getOrNull(position) != null){
+            Picasso.get().load(listImgUrl[position]).into(holder.imgView)
 
-//        if (listImgUrl[position])
-        Picasso.get().load(listImgUrl[position]).into(holder.imgView)
+            db.collection("users").document(listDocIds[position]).get()
+                .addOnSuccessListener {
+                        e->
+//                if (e["FullName"].toString() ){
 
-        db.collection("users").document(listDocIds[position]).get()
-            .addOnSuccessListener {
-                e->
-                holder.msg.text =  e["FullName"].toString()
-                holder.senderTitle.text = e["FullName"].toString()
-                holder.ids.text = listDocIds[position]
-                holder.ids.visibility = View.INVISIBLE
+                    holder.msg.text =  e["FullName"].toString()
+                    holder.senderTitle.text = e["FullName"].toString()
+                    holder.ids.text = listDocIds[position]
+                    holder.ids.visibility = View.INVISIBLE
+                }
 
-                Log.w("teshoho", holder.senderTitle.text.toString())
-            }
+//                    Log.w("teshoho", holder.senderTitle.text.toString())
+//            }
+        }
     }
 
     override fun getItemCount(): Int {
@@ -59,6 +62,7 @@ class BimbingAdapter() : RecyclerView.Adapter<BimbingAdapter.ViewHolder>() {
     }
 
     inner class ViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView){
+
         var imgView : ImageView = itemView.findViewById(R.id.rvImageView)
         var senderTitle : TextView = itemView.findViewById(R.id.rvTitle)
         var msg : TextView = itemView.findViewById(R.id.rvMsg)
