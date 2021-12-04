@@ -63,6 +63,77 @@
         app:layout_constraintTop_toBottomOf="@id/linearLayout4" />
 
     <LinearLayout
+        android:id="@+id/emojiTab"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="10dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
+        app:layout_constraintEnd_toEndOf="parent">>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/e1"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+
+                android:text="😎" />
+
+            <Button
+                android:id="@+id/e2"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+
+                android:text="😍" />
+
+            <Button
+                android:id="@+id/e3"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+
+                android:text="😈" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/e4"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+
+                android:text="😀" />
+
+            <Button
+                android:id="@+id/e5"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+
+                android:text="😂" />
+
+            <Button
+                android:id="@+id/e6"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+
+                android:text="😅" />
+        </LinearLayout>
+    </LinearLayout>
+
+
+
+
+
+
+    <LinearLayout
         android:id="@+id/linearLayout2"
         android:layout_width="0dp"
         android:layout_height="50dp"
@@ -75,8 +146,8 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="0dp"
-            android:layout_weight="7"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_weight="5">
 
             <EditText
                 android:id="@+id/messageField"
@@ -91,10 +162,27 @@
             android:id="@+id/sendBtn"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="3"
-            android:textColor="@color/white"
+            android:layout_weight="2"
             android:background="@color/MainColor"
-            android:text="SEND" />
+            android:text="SEND"
+            android:textColor="@color/white" />
+
+        <Button
+            android:id="@+id/uploadBtn"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/ic_baseline_arrow_upward_24"
+            android:textColor="@color/black" />
+
+        <Button
+            android:id="@+id/emojiBtn"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/ic_baseline_emoji_emotions_24" />
 
     </LinearLayout>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
