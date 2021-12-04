@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:id="@+id/chatTemplate"
-    app:cardBackgroundColor="@color/White"
+    app:cardBackgroundColor="@color/MainColor"
     app:cardCornerRadius="24dp"
     android:elevation="20dp"
     android:layout_marginTop="24dp"
@@ -25,7 +25,7 @@
             android:layout_marginStart="80dp"
             android:layout_marginTop="4dp"
             android:text="Kucingnya Tetangga"
-            android:textColor="@color/black"
+            android:textColor="@color/White"
             android:textSize="20dp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
@@ -39,7 +39,7 @@
             android:layout_marginStart="80dp"
             android:layout_marginTop="4dp"
             android:text="chat meong meong"
-            android:textColor="@color/black"
+            android:textColor="@color/White"
             android:textSize="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -60,7 +60,8 @@
         <TextView
             android:id="@+id/rv_id"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            tools:ignore="MissingConstraints" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

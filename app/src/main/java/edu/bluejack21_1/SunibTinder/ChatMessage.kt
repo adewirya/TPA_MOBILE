@@ -75,6 +75,7 @@ class ChatMessage : AppCompatActivity() {
     }
 
     private fun showReceiverProfile(){
+//        Log.w("tesaaa", receiverId)
         db.collection("users").document(receiverId).get().addOnSuccessListener { e ->
             val imageUrl = Uri.parse(e["Profile"].toString())
             Picasso.get().load(imageUrl).into(receiverPicture)
