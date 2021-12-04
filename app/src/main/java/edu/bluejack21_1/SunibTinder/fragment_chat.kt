@@ -118,6 +118,7 @@ class fragment_chat : Fragment() {
 
     private fun searchOnce(callback: (Boolean) -> Unit){
         var imageUrl : Uri
+
         db.collection("users").document(docId).get().addOnSuccessListener {
                 e ->
 //            if (){
@@ -183,7 +184,7 @@ class fragment_chat : Fragment() {
         // Inflate the layout for this fragment
         sharedPref = SharedPrefConfig(this.requireContext())
         docId = sharedPref.getString("Uid").toString()
-
+        Log.w("dos", docId)
         // Inflate the layout for this fragment
         v = FragmentChatBinding.inflate(inflater, container, false)
         pp = binding.imageView8

@@ -117,6 +117,7 @@ class fragment_suggested : Fragment() {
 
         passionLayout = binding.passionLayout
 
+
         getData {
             es->
             if (es){
@@ -446,10 +447,13 @@ class fragment_suggested : Fragment() {
                 e->
             imageStrArray = e["Carousel"] as MutableList<String>
 
+            val profile = binding.suggestedProfile
             val fullName = binding.suggestFullName
             val bio = binding.suggestBio
             val age = binding.suggestAge
             val location = binding.suggestLocation
+            val imageUrl = Uri.parse(imageStrArray[0])
+            Picasso.get().load(imageUrl).into(profile)
 
             fullName.text = e["FullName"].toString()
             bio.text = e["Bio"].toString()
