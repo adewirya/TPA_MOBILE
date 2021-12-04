@@ -1,10 +1,21 @@
 package edu.bluejack21_1.SunibTinder
 
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import androidx.navigation.findNavController
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
+import com.squareup.picasso.Picasso
+import edu.bluejack21_1.SunibTinder.databinding.FragmentChatBinding
+import edu.bluejack21_1.SunibTinder.databinding.FragmentProfileBinding
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -20,7 +31,15 @@ class fragment_chat : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+    val db = Firebase.firestore
 
+
+    private var v: FragmentChatBinding? = null
+    private val binding get() = v!!
+    private lateinit var sharedPref : SharedPrefConfig
+    private lateinit var docId : String
+    private lateinit var pp: ImageView
+    private lateinit var matchList : List<String>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -34,7 +53,35 @@ class fragment_chat : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_chat, container, false)
+        sharedPref = SharedPrefConfig(this.requireContext())
+        docId = sharedPref.getString("Uid").toString()
+
+        // Inflate the layout for this fragment
+        v = FragmentChatBinding.inflate(inflater, container, false)
+        pp = binding.imageView8
+
+        Log.w("teschat", docId)
+        var imageUrl : Uri
+
+
+        //set profile pic
+        db.collection("users").document(docId).get().addOnSuccessListener {
+                e ->
+            imageUrl = Uri.parse(e["Profile"].toString())
+            Picasso.get().load(imageUrl).into(pp)
+
+            if (e["Match"] != null){
+                matchList = e["Match"] as List<String>
+            }
+            Log.w("teschat", matchList.toString())
+        }
+        pp.setOnClickListener{
+                view ->
+            view.findNavController().navigate(R.id.fragment_profile)
+        }
+
+
+        return v!!.root
     }
 
     companion object {
