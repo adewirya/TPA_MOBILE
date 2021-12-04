@@ -13,12 +13,13 @@
         <entry key="..\:/Users/62822/Documents/Asslab/TPA/TPA_Mobile/app/src/main/res/layout/activity_main.xml" value="0.264" />
         <entry key="..\:/Users/62822/Documents/Asslab/TPA/TPA_Mobile/app/src/main/res/layout/activity_other_profile.xml" value="0.1" />
         <entry key="..\:/Users/62822/Documents/Asslab/TPA/TPA_Mobile/app/src/main/res/layout/activity_settings.xml" value="0.176" />
-        <entry key="..\:/Users/62822/Documents/Asslab/TPA/TPA_Mobile/app/src/main/res/layout/fragment_chat.xml" value="0.18432971014492755" />
+        <entry key="..\:/Users/62822/Documents/Asslab/TPA/TPA_Mobile/app/src/main/res/layout/fragment_chat.xml" value="0.310126582278481" />
         <entry key="..\:/Users/62822/Documents/Asslab/TPA/TPA_Mobile/app/src/main/res/layout/fragment_login.xml" value="0.264" />
         <entry key="..\:/Users/62822/Documents/Asslab/TPA/TPA_Mobile/app/src/main/res/layout/fragment_profile.xml" value="0.4" />
         <entry key="..\:/Users/62822/Documents/Asslab/TPA/TPA_Mobile/app/src/main/res/layout/fragment_register.xml" value="0.264" />
         <entry key="..\:/Users/62822/Documents/Asslab/TPA/TPA_Mobile/app/src/main/res/layout/fragment_suggested.xml" value="0.2" />
         <entry key="..\:/Users/62822/Documents/Asslab/TPA/TPA_Mobile/app/src/main/res/layout/login_page.xml" value="0.264" />
+        <entry key="..\:/Users/62822/Documents/Asslab/TPA/TPA_Mobile/app/src/main/res/layout/rv_child_chat.xml" value="0.11666666666666667" />
         <entry key="..\:/Users/62822/Documents/Asslab/TPA/TPA_Mobile/app/src/main/res/layout/tes_figma.xml" value="0.13020833333333334" />
         <entry key="..\:/Users/maver/Desktop/bimbing/TPA_MOBILE/app/src/main/res/drawable/shape.xml" value="0.2755208333333333" />
         <entry key="..\:/Users/maver/Desktop/bimbing/TPA_MOBILE/app/src/main/res/drawable/textfield_design.xml" value="0.2755208333333333" />
@@ -33,7 +34,7 @@
         <entry key="..\:/Users/maver/Desktop/bimbing/TPA_MOBILE/app/src/main/res/layout/activity_other_profile.xml" value="0.264" />
         <entry key="..\:/Users/maver/Desktop/bimbing/TPA_MOBILE/app/src/main/res/layout/activity_profile.xml" value="0.264" />
         <entry key="..\:/Users/maver/Desktop/bimbing/TPA_MOBILE/app/src/main/res/layout/activity_settings.xml" value="0.16614583333333333" />
-        <entry key="..\:/Users/maver/Desktop/bimbing/TPA_MOBILE/app/src/main/res/layout/fragment_chat.xml" value="0.4" />
+        <entry key="..\:/Users/maver/Desktop/bimbing/TPA_MOBILE/app/src/main/res/layout/fragment_chat.xml" value="0.2" />
         <entry key="..\:/Users/maver/Desktop/bimbing/TPA_MOBILE/app/src/main/res/layout/fragment_login.xml" value="0.4" />
         <entry key="..\:/Users/maver/Desktop/bimbing/TPA_MOBILE/app/src/main/res/layout/fragment_profile.xml" value="0.4" />
         <entry key="..\:/Users/maver/Desktop/bimbing/TPA_MOBILE/app/src/main/res/layout/fragment_register.xml" value="0.4" />

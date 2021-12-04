@@ -43,7 +43,7 @@ class   EditInfo : AppCompatActivity() {
     private lateinit var img3 : ImageView
     private lateinit var img4 : ImageView
 
-    val pd : ProgressDialog = ProgressDialog(this)
+    private lateinit var pd : ProgressDialog
 
     private var bol1 : Boolean = false
     private var bol2 : Boolean = false
@@ -64,6 +64,8 @@ class   EditInfo : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_info)
 
+
+        pd = ProgressDialog(this)
         storage = FirebaseStorage.getInstance()
         storageRef = storage.getReference()
 
@@ -450,7 +452,7 @@ class   EditInfo : AppCompatActivity() {
                 btn4.visibility = View.INVISIBLE
             }
 
-            pd.show()
+            pd.dismiss()
         }
     }
 

@@ -42,7 +42,7 @@ class fragment_profile : Fragment() {
     private var param2: String? = null
     private lateinit var imageUri : Uri
 
-    val pd : ProgressDialog = ProgressDialog(this.requireContext())
+    private lateinit var pd : ProgressDialog
 
     private lateinit var imageView : ImageView
 
@@ -76,6 +76,7 @@ class fragment_profile : Fragment() {
         // Inflate the layout for this fragment
         sharedPref = SharedPrefConfig(this.requireContext())
         docId = sharedPref.getString("Uid").toString()
+        pd = ProgressDialog(this.requireContext())
 
         // Inflate the layout for this fragment
         v = FragmentProfileBinding.inflate(inflater, container, false)
@@ -116,7 +117,7 @@ class fragment_profile : Fragment() {
             }
             pd.setMessage("Getting Data from database...")
         }.addOnCompleteListener{
-            db.collection("users").document(docId).update("Profile", imageUrl)
+            db.collection("users").document(docId).update("Profile", imageUrl.toString())
             pd.dismiss()
         }
 

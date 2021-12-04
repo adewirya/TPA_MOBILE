@@ -61,7 +61,7 @@ class fragment_suggested : Fragment() {
 
     private var currIdx : Long = 0
 
-    val pd : ProgressDialog = ProgressDialog(this.requireContext())
+    private lateinit var pd : ProgressDialog
 
     private lateinit var fullName : String
     private lateinit var location : String
@@ -87,6 +87,7 @@ class fragment_suggested : Fragment() {
         // Inflate the layout for this fragment
         v = FragmentSuggestedBinding.inflate(inflater, container, false)
 
+        pd = ProgressDialog(this.requireContext())
 
 
         sharedPref = SharedPrefConfig(this.requireContext())
@@ -129,7 +130,7 @@ class fragment_suggested : Fragment() {
         btnInfo.setOnClickListener{
             activity?.let{
                 val intent = Intent (it, OtherProfile::class.java)
-                intent.putExtra("Uid", docId)
+                intent.putExtra("Uid", listOfDocIds[currIdx.toInt()])
                 it.startActivity(intent)
             }
         }
