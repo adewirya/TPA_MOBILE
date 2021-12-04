@@ -1,16 +1,20 @@
 package edu.bluejack21_1.SunibTinder
 
+import android.annotation.SuppressLint
 import android.app.ProgressDialog
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AbsListView
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
+import androidx.core.os.HandlerCompat.postDelayed
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -25,6 +29,7 @@ import com.google.firebase.storage.StorageReference
 import com.squareup.picasso.Picasso
 import edu.bluejack21_1.SunibTinder.databinding.FragmentChatBinding
 import edu.bluejack21_1.SunibTinder.databinding.FragmentProfileBinding
+import kotlinx.coroutines.delay
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -48,16 +53,25 @@ class fragment_chat : Fragment() {
     private lateinit var sharedPref : SharedPrefConfig
     private lateinit var docId : String
     private lateinit var pp: ImageView
-    private lateinit var matchList : List<String>
-    private lateinit var listUrl : MutableList<String>
-    private lateinit var listName : MutableList<String>
-    private lateinit var listMsg : MutableList<String>
+    private var matchList : List<String> = mutableListOf<String>()
+    private var listUrl = mutableListOf<String>()
+    private var listName = mutableListOf<String>()
+    private var listMsg = mutableListOf<String>()
+
+
+
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var pd : ProgressDialog
 
     private lateinit var chatSnapshot : QuerySnapshot
     private lateinit var chatTask : Task<QuerySnapshot>
+
+    private lateinit var adapter : BimbingAdapter
+    private var isLoading : Boolean = false
+
+    private var start = 0
+    private var end = 3
 
     private fun addRange(
         newUrls : MutableList<String>,
@@ -95,12 +109,8 @@ class fragment_chat : Fragment() {
         }
     }
 
-    private fun getData(callback : (Boolean) -> Unit){
-        pd.setTitle("Getting Data")
-        pd.setMessage("Percentage : 0%")
-        pd.show()
+    private fun searchOnce(callback: (Boolean) -> Unit){
         var imageUrl : Uri
-        var ctr = 0
         db.collection("users").document(docId).get().addOnSuccessListener {
                 e ->
             imageUrl = Uri.parse(e["Profile"].toString())
@@ -109,27 +119,42 @@ class fragment_chat : Fragment() {
             if (e["Match"] != null){
                 matchList = e["Match"] as List<String>
             }
-
         }.addOnCompleteListener{
-
-            pd.setMessage("Percentage : 50%")
-            for (i in 0..4 ){
-                db.collection("users").document(matchList[i]).get().addOnSuccessListener {
-                        e->
-                    listUrl.add(e["Profile"].toString())
-                    ctr += 1
-                    if (ctr == 5){
-                        callback(true)
-                    }
-                }
-            }
-            pd.setMessage("Percentage : 75%")
+            Log.w("datatest", matchList.toString())
+            callback(true)
         }
     }
 
-    private fun loadData(){
+    private fun getData(startPoint : Int, endPoint : Int, callback : (Boolean) -> Unit){
+        pd.setTitle("Getting Data")
+        pd.setMessage("Percentage : 0%")
+        pd.show()
 
+        var endPoints = endPoint
+
+        if (matchList.isNotEmpty()){
+            if (endPoints > matchList.size-1){
+                endPoints = matchList.size-1
+            }
+        }
+
+        pd.setMessage("Percentage : 50%")
+            val temp = mutableListOf<String>()
+        (startPoint..endPoints ).forEach{
+
+            db.collection("users").document(matchList[it]).get().addOnSuccessListener { e->
+                Log.w("datatest", matchList[it])
+                listUrl.add(e["Profile"].toString())
+                if (it == endPoints){
+                    callback(true)
+                }
+            }
+        }
+
+
+            pd.setMessage("Percentage : 75%")
     }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -143,72 +168,81 @@ class fragment_chat : Fragment() {
         pp = binding.imageView8
         pd = ProgressDialog(this.requireContext())
 
-        listUrl = mutableListOf<String>()
-        listMsg = mutableListOf<String>()
-        listName = mutableListOf<String>()
 
         pp.setOnClickListener{
                 view ->
             view.findNavController().navigate(R.id.fragment_profile)
         }
 
-        getData { e->
-            if (e){
-                Log.w("teshoho" , "$listUrl, ${listUrl.size} ")
-                recyclerView = binding.recyclerView
 
-                recyclerView.layoutManager = LinearLayoutManager(activity)
-                val adapter = BimbingAdapter()
+        recyclerView = binding.recyclerView
+        recyclerView.layoutManager = LinearLayoutManager(activity)
 
-                adapter.listDocIds = matchList as MutableList<String>
-                adapter.listImgUrl = listUrl
-
-                recyclerView.adapter = adapter
-                pd.setMessage("Percentage : 100%")
-                pd.dismiss()
+        searchOnce {
+            bl ->
+            if (bl){
+                getData(start,end) { e->
+                    if (e){
+                        assignData()
+                    }
+                }
             }
         }
 
+        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener(){
+            override fun onScrolled (recyclerView: RecyclerView, dx : Int, dy : Int){
 
+                    Log.w("teshoho", "masuk scroll + ${end}")
+
+                    val visibleItemCount = LinearLayoutManager(activity).childCount
+                    val pastVisibleItem = LinearLayoutManager(activity).findFirstCompletelyVisibleItemPosition()
+                    val total = adapter.itemCount
+
+                    if (!isLoading && end < (matchList.size)){
+//                        if(visibleItemCount + pastVisibleItem >= total){
+                            if (visibleItemCount < matchList.size){
+                                assignData()
+                            }
+//                        }
+                    }
+                super.onScrolled(recyclerView, dx, dy)
+            }
+        })
 
         return v!!.root
     }
 
-
-    var page = 1
-    var isLoading =false
-    var limit = 5
-
-    fun getPage(){
-        val start  = (page-1) * limit
-        val end = (page) * limit
-
-        for (i in start..end){
-
-        }
+    @SuppressLint("NotifyDataSetChanged")
+    private fun assignData(){
+        Log.w("teshoho" , "$listUrl, ${listUrl.size} ")
+        isLoading = true
+        Handler().postDelayed({
+             if (::adapter.isInitialized && end <= (matchList.size-1)){
+                     start += 4
+                     end += 4
+                     Log.w("teshaha", "masuk kedua + ${end} < ${matchList.size - 1}")
+//                 if (end < (matchList.size-1)){
+                     getData(start,end){
+                             e->
+                         if (e){
+                             adapter.listImgUrl = listUrl
+                             adapter.notifyDataSetChanged()
+                             pd.dismiss()
+                         }
+                     }
+//                 }
+             } else {
+                 Log.w("teshaha", "masuk awal")
+                 adapter =  BimbingAdapter()
+                 adapter.listDocIds = matchList as MutableList<String>
+                 adapter.listImgUrl = listUrl
+                 recyclerView.adapter = adapter
+             }
+        }, 5000)
+        isLoading = false
+        pd.setMessage("Percentage : 100%")
+        pd.dismiss()
     }
-//
-//    class RecyclerAdapter(val activity: Home ) : RecyclerView.Adapter<RecyclerAdapter.RecyclerViewHolder>(){
-//
-//
-//        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerViewHolder {
-//            return RecyclerViewHolder(LayoutInflater.from(activity).inflate(R.layout.rv_child_chat,parent,false))
-//        }
-//
-//        override fun onBindViewHolder(holder: RecyclerViewHolder, position: Int) {
-//            holder.chatObj.text = activity.chatList[position]
-//        }
-//
-//        override fun getItemCount(): Int {
-//            return activity.chatList.size
-//        }
-//
-//
-//        class RecyclerViewHolder(v : View) : RecyclerView.ViewHolder(v){
-//            val chatObj = v.findViewById<Button>(R.id.chatComponent)
-//        }
-//
-//    }
 
     companion object {
         /**
