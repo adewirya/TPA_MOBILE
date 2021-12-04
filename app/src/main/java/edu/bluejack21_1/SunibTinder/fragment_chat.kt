@@ -1,5 +1,6 @@
 package edu.bluejack21_1.SunibTinder
 
+import Message
 import android.annotation.SuppressLint
 import android.app.ProgressDialog
 import android.net.Uri
@@ -20,6 +21,10 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.tasks.Task
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.database
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.firestore
@@ -30,6 +35,7 @@ import com.squareup.picasso.Picasso
 import edu.bluejack21_1.SunibTinder.databinding.FragmentChatBinding
 import edu.bluejack21_1.SunibTinder.databinding.FragmentProfileBinding
 import kotlinx.coroutines.delay
+import java.lang.Exception
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -66,6 +72,7 @@ class fragment_chat : Fragment() {
 
     private lateinit var chatSnapshot : QuerySnapshot
     private lateinit var chatTask : Task<QuerySnapshot>
+    private var listOfLastMsg = mutableListOf<String>()
 
     private lateinit var adapter : BimbingAdapter
     private var isLoading : Boolean = false
@@ -120,9 +127,13 @@ class fragment_chat : Fragment() {
                 matchList = e["Match"] as List<String>
             }
         }.addOnCompleteListener{
-            Log.w("datatest", matchList.toString())
-            callback(true)
+            if (matchList.isEmpty()){
+                callback(false)
+            } else {
+                callback(true)
+            }
         }
+
     }
 
     private fun getData(startPoint : Int, endPoint : Int, callback : (Boolean) -> Unit){
@@ -140,14 +151,15 @@ class fragment_chat : Fragment() {
 
         pd.setMessage("Percentage : 50%")
             val temp = mutableListOf<String>()
-        (startPoint..endPoints ).forEach{
+        (startPoint..endPoints).forEach{
 
             db.collection("users").document(matchList[it]).get().addOnSuccessListener { e->
-                Log.w("datatest", matchList[it])
-                listUrl.add(e["Profile"].toString())
                 if (it == endPoints){
                     callback(true)
                 }
+                getLastMessage(matchList[it])
+                listUrl.add(e["Profile"].toString())
+                Log.w("datahehe2", listUrl.toString())
             }
         }
 
@@ -225,6 +237,7 @@ class fragment_chat : Fragment() {
                      getData(start,end){
                              e->
                          if (e){
+                             adapter.listMsg = listOfLastMsg
                              adapter.listImgUrl = listUrl
                              adapter.notifyDataSetChanged()
                              pd.dismiss()
@@ -236,12 +249,47 @@ class fragment_chat : Fragment() {
                  adapter =  BimbingAdapter()
                  adapter.listDocIds = matchList as MutableList<String>
                  adapter.listImgUrl = listUrl
+                 adapter.listMsg = listOfLastMsg
                  recyclerView.adapter = adapter
              }
         }, 5000)
         isLoading = false
         pd.setMessage("Percentage : 100%")
         pd.dismiss()
+    }
+
+    private fun getLastMessage(senderId : String){
+        var lastMsg : String = ""
+        val dbUrl = "https://sunibtinder-eb42f-default-rtdb.asia-southeast1.firebasedatabase.app/"
+        val rDb =Firebase.database(dbUrl).reference
+
+        try {
+            rDb.child("Message").addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    for(snap in snapshot.children){
+                        val msg = snap.getValue(Message::class.java)
+                        if(msg != null){
+                            if(msg.senderId.equals(senderId) && msg.receiverId.equals(docId)
+                                || msg?.senderId.equals(docId) && msg?.receiverId.equals(senderId)
+                            ){
+                                lastMsg = msg.text.toString()
+                                listOfLastMsg.add(lastMsg)
+                            }
+                        }
+
+                    }
+
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    TODO("Not yet implemented")
+                }
+            })
+            Log.w("lastmsg", lastMsg)
+        }catch (e : Exception){
+            e.printStackTrace()
+        }
+
     }
 
     companion object {

@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="edu.bluejack21_1.SunibTinder">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:allowBackup="true"
@@ -19,7 +21,8 @@
             android:exported="true" />
         <activity
             android:name=".otherProfile"
-            android:exported="false" />
+            android:exported="false"/>
+
         <activity
             android:name=".AddPassion"
             android:exported="false" />
@@ -59,6 +62,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <receiver android:name="AlarmReceiverService" android:exported="true">
+
+        </receiver>
     </application>
 
 </manifest>

@@ -1,6 +1,9 @@
 package edu.bluejack21_1.SunibTinder
 
+import android.app.AlarmManager
+import android.app.PendingIntent
 import android.app.ProgressDialog
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -12,6 +15,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.core.content.ContextCompat.getSystemService
 import com.denzcoskun.imageslider.models.SlideModel
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -21,6 +25,7 @@ import com.synnapps.carouselview.ImageListener
 import edu.bluejack21_1.SunibTinder.databinding.FragmentProfileBinding
 import edu.bluejack21_1.SunibTinder.databinding.FragmentSuggestedBinding
 import kotlinx.coroutines.selects.select
+import java.util.*
 import kotlin.properties.Delegates
 import kotlin.random.Random
 import kotlin.reflect.typeOf
@@ -105,7 +110,7 @@ class fragment_suggested : Fragment() {
         val btnYes = binding.btnYes
         val btnInfo = binding.btnInfo
 
-
+        setAlarm()
 
         getData {
             es->
@@ -311,7 +316,7 @@ class fragment_suggested : Fragment() {
 
         listOfLikes.add(selectedDoc)
 
-        Toast.makeText(this.requireContext(), "masuk 1", Toast.LENGTH_SHORT).show()
+//        Toast.makeText(this.requireContext(), "masuk 1", Toast.LENGTH_SHORT).show()
 
         db.collection("users").document(docId).update(
             "Likes",
@@ -337,7 +342,7 @@ class fragment_suggested : Fragment() {
 
                         db.collection("users").document(docId).update("Match", listOfMatches)
 
-                        Toast.makeText(this.requireContext(), "masuk 3", Toast.LENGTH_SHORT).show()
+//                        Toast.makeText(this.requireContext(), "masuk 3", Toast.LENGTH_SHORT).show()
 
                         var tempArr : MutableList<String> = mutableListOf<String>()
                         db.collection("users").document(selectedDoc).get().addOnSuccessListener {
@@ -359,9 +364,41 @@ class fragment_suggested : Fragment() {
         changeIdx()
     }
 
+
+
+
+    public fun setAlarm(){
+//        Log.w("Hensemganteng", "muehehe")
+        val alarmManager = context?.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val alarmIntent = Intent(this.requireContext(), AlarmReceiverService::class.java)
+        val pendingIntent = PendingIntent.getBroadcast(this.requireContext(), 0, alarmIntent, 0)
+        alarmManager.cancel(pendingIntent)
+        val cal = Calendar.getInstance()
+        cal.add(Calendar.SECOND, 1)
+        alarmManager.setInexactRepeating(
+            AlarmManager.RTC_WAKEUP,
+            cal.timeInMillis,
+            AlarmManager.INTERVAL_DAY,
+            pendingIntent
+        )
+    }
+
     private fun addToNo(){
         // add no to db
+        val selectedDoc : String = listOfDocIds[currIdx.toInt()]
 
+        listOfUnlikes.add(selectedDoc)
+
+//        Toast.makeText(this.requireContext(), "masuk 1", Toast.LENGTH_SHORT).show()
+
+        db.collection("users").document(docId).update(
+            "Unlikes",
+            listOfUnlikes
+        ).addOnSuccessListener {
+//            Toast.makeText(this.requireContext(), "Added to like", Toast.LENGTH_SHORT).show()
+        }.addOnCompleteListener{
+
+        }
 
         changeIdx()
     }
