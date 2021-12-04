@@ -52,6 +52,7 @@ class ChatMessage : AppCompatActivity() {
     private lateinit var storageRef : StorageReference
     private lateinit var emojiTab : String
     private lateinit var emojiTabLayout : LinearLayout
+    private lateinit var lastMsg : String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat_message)
@@ -70,7 +71,7 @@ class ChatMessage : AppCompatActivity() {
         storage = FirebaseStorage.getInstance()
         storageRef = storage.getReference()
         emojiTab = "FALSE"
-
+        lastMsg = ""
         val db = Firebase.database(dbUrl)
         rDb = db.reference
 
@@ -88,14 +89,15 @@ class ChatMessage : AppCompatActivity() {
         emojiBtn.setOnClickListener {
             handleEmojiTab()
         }
-
+        getLastMessage()
+        Log.w("lastmsg", lastMsg)
         setUpEmoji()
 
         layout = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
         layout.stackFromEnd = true
         recyclerview.layoutManager = layout
 
-        getLastMessage()
+
 
         readMessage()
 
@@ -103,12 +105,12 @@ class ChatMessage : AppCompatActivity() {
 
     }
 
-    private fun getLastMessage() : String{
-        var lastMsg = ""
+    private fun getLastMessage(){
+
+
         try {
             rDb.child("Message").addValueEventListener(object : ValueEventListener{
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    lastMsg = ""
                     for(snap in snapshot.children){
                         val msg = snap.getValue(Message::class.java)
                         if(msg != null){
@@ -127,12 +129,11 @@ class ChatMessage : AppCompatActivity() {
                     TODO("Not yet implemented")
                 }
             })
-
+            Log.w("lastmsg", lastMsg)
         }catch (e : Exception){
             e.printStackTrace()
         }
 
-        return lastMsg
     }
 
 
