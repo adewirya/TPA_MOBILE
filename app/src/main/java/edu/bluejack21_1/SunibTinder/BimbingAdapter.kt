@@ -26,7 +26,7 @@ class BimbingAdapter() : RecyclerView.Adapter<BimbingAdapter.ViewHolder>() {
 
     lateinit var adapter: BimbingAdapter
 //    var listName : MutableList<String> = mutableListOf<String>()
-//    var listMsg : MutableList<String> = mutableListOf<String>()
+    var listMsg : MutableList<String> = mutableListOf<String>()
     var listImgUrl : MutableList<String> = mutableListOf<String>()
     var listDocIds : MutableList<String> = mutableListOf<String>()
 
@@ -40,13 +40,13 @@ class BimbingAdapter() : RecyclerView.Adapter<BimbingAdapter.ViewHolder>() {
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         if (listImgUrl.getOrNull(position) != null){
             Picasso.get().load(listImgUrl[position]).into(holder.imgView)
-
+            holder.msg.text = listMsg[position]
             db.collection("users").document(listDocIds[position]).get()
                 .addOnSuccessListener {
                         e->
 //                if (e["FullName"].toString() ){
 
-                    holder.msg.text =  e["FullName"].toString()
+//                    holder.msg.text =  e["FullName"].toString()
                     holder.senderTitle.text = e["FullName"].toString()
                     holder.ids.text = listDocIds[position]
                     holder.ids.visibility = View.INVISIBLE
