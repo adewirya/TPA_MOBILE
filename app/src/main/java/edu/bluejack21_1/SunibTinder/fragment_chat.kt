@@ -76,8 +76,7 @@ class fragment_chat : Fragment() {
                         e->
                     listName.add(e["FullName"].toString())
                     listMsg.add(e["FullName"].toString())
-                    val temp = e["Profile"].toString()
-                    listUrl.add(temp)
+                    listUrl.add(e["Profile"].toString())
                     ctr += 1
                     if (ctr == matchList.size){
                         callback(true)
