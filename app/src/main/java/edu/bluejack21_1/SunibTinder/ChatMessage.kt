@@ -51,7 +51,6 @@ class ChatMessage : AppCompatActivity() {
         receiverPicture = findViewById<ImageView>(R.id.receiverPicture)
         recyclerview = findViewById<RecyclerView>(R.id.recyclerView)
         msgList = mutableListOf<Message>()
-//        senderId = ""
 
         val db = Firebase.database(dbUrl)
         rDb = db.reference
@@ -80,7 +79,7 @@ class ChatMessage : AppCompatActivity() {
             val imageUrl = Uri.parse(e["Profile"].toString())
             Picasso.get().load(imageUrl).into(receiverPicture)
 
-            receiverName.setText(e["Name"].toString())
+            receiverName.setText(e["FullName"].toString())
 
         }
 
@@ -98,8 +97,9 @@ class ChatMessage : AppCompatActivity() {
 
     private fun readMessage(){
         try {
-            rDb.child("Pesan").addValueEventListener(object : ValueEventListener{
+            rDb.child("Message").addValueEventListener(object : ValueEventListener{
                 override fun onDataChange(snapshot: DataSnapshot) {
+                    msgList.clear()
                     for(snap in snapshot.children){
                         val msg = snap.getValue(Message::class.java)
                         if(msg != null){
@@ -109,7 +109,6 @@ class ChatMessage : AppCompatActivity() {
                                 msgList.add(msg)
                             }
                         }
-
 
                     }
                     if(messageAdapter != null){
@@ -132,17 +131,17 @@ class ChatMessage : AppCompatActivity() {
 
     private fun sendData(){
         val date = Calendar.getInstance().time
-        val tgl = SimpleDateFormat("dd-mm-yyyy")
+        val tgl = SimpleDateFormat("dd-MM-yyyy")
         val day = tgl.format(date)
 
         val cal = Calendar.getInstance()
-        val time = SimpleDateFormat("hh: mm")
-        val hour = tgl.format(date)
+        val time = SimpleDateFormat("hh:mm")
+        val hour = time.format(cal.time)
 //        rDb?.
 //            child("messages")?.
 //                child(java.lang.String.valueOf(System.currentTimeMillis()))?.
 //                setValue(Message(messageField.text.toString()))
-        val newMsg = Message(messageField.text.toString(), senderId, receiverId, day + " " + hour)
+        val newMsg = Message(messageField.text.toString(), senderId, receiverId, day + " , " + hour)
         rDb.child("Message").push().setValue(newMsg).addOnSuccessListener {
             e ->
             Log.w("teschat", "Sent Message")
@@ -153,6 +152,8 @@ class ChatMessage : AppCompatActivity() {
 
         val Rdb2 = Firebase.database(dbUrl).getReference("Chat List").child(receiverId).child(senderId)
         Rdb2.child("chatID").setValue(receiverId)
+
+        messageField.setText("")
     }
 
 }
