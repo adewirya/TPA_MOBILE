@@ -40,7 +40,12 @@ class BimbingAdapter() : RecyclerView.Adapter<BimbingAdapter.ViewHolder>() {
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         if (listImgUrl.getOrNull(position) != null){
             Picasso.get().load(listImgUrl[position]).into(holder.imgView)
-            holder.msg.text = listMsg[position]
+            if (listMsg.getOrNull(position) != null ){
+                holder.msg.text = listMsg[position]
+            }
+            else {
+                holder.msg.text = ""
+            }
             db.collection("users").document(listDocIds[position]).get()
                 .addOnSuccessListener {
                         e->
