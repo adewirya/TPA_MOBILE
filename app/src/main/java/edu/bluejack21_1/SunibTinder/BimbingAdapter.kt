@@ -3,6 +3,7 @@ package edu.bluejack21_1.SunibTinder
 import android.content.Intent
 import android.icu.text.Transliterator
 import android.net.Uri
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,9 +20,11 @@ class BimbingAdapter() : RecyclerView.Adapter<BimbingAdapter.ViewHolder>() {
 
     val db = Firebase.firestore
 
-    val listName : MutableList<String> = mutableListOf<String>()
-    val listMsg : MutableList<String> = mutableListOf<String>()
-    val listImgUrl : MutableList<Uri> = mutableListOf<Uri>()
+
+    lateinit var adapter: BimbingAdapter
+    var listName : MutableList<String> = mutableListOf<String>()
+    var listMsg : MutableList<String> = mutableListOf<String>()
+    var listImgUrl : MutableList<String> = mutableListOf<String>()
     var listDocIds : MutableList<String> = mutableListOf<String>()
 
 
@@ -36,7 +39,7 @@ class BimbingAdapter() : RecyclerView.Adapter<BimbingAdapter.ViewHolder>() {
                 // redirect ke chatroom
                 // bebas bimbing mau kasi extrasnya apa
                 // addphotos diganti class bimbing
-                 val intent  = Intent(itemView.context, AddPhotos::class.java)
+                 val intent  = Intent(itemView.context, ChatMessage::class.java)
                 intent.putExtra("Uid", id)
                 itemView.context.startActivity(intent)
             }
@@ -45,6 +48,7 @@ class BimbingAdapter() : RecyclerView.Adapter<BimbingAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val v = LayoutInflater.from(parent.context).inflate(R.layout.rv_chat, parent , false)
+
         return ViewHolder(v)
     }
 
@@ -55,9 +59,10 @@ class BimbingAdapter() : RecyclerView.Adapter<BimbingAdapter.ViewHolder>() {
         holder.msg.text = listMsg[position]
         holder.senderTitle.text = listName[position]
         holder.ids.text = listDocIds[position]
+        holder.ids.visibility = View.INVISIBLE
     }
 
     override fun getItemCount(): Int {
-        return listDocIds.size
+        return listImgUrl.size
     }
 }

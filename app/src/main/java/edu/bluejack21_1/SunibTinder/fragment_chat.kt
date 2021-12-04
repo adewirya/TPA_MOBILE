@@ -44,6 +44,9 @@ class fragment_chat : Fragment() {
     private lateinit var docId : String
     private lateinit var pp: ImageView
     private lateinit var matchList : List<String>
+    private lateinit var listUrl : MutableList<String>
+    private lateinit var listName : MutableList<String>
+    private lateinit var listMsg : MutableList<String>
 
     private lateinit var recyclerView: RecyclerView
 
@@ -53,6 +56,34 @@ class fragment_chat : Fragment() {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
+    }
+
+    private fun getData(callback : (Boolean) -> Unit){
+        var imageUrl : Uri
+        db.collection("users").document(docId).get().addOnSuccessListener {
+                e ->
+            imageUrl = Uri.parse(e["Profile"].toString())
+            Picasso.get().load(imageUrl).into(pp)
+
+            if (e["Match"] != null){
+                matchList = e["Match"] as List<String>
+            }
+
+            for (i in matchList){
+                db.collection("users").document(i).get().addOnSuccessListener {
+                        e->
+//                    Log.w("teshoho", "hoh " + e["Profile"].toString())
+                    listName.add(e["FullName"].toString())
+                    listMsg.add(e["FullName"].toString())
+                    val temp = e["Profile"].toString()
+                    listUrl.add(temp)
+                }.addOnCompleteListener{
+                    callback(true)
+                }
+            }
+
+        }
+
     }
 
     override fun onCreateView(
@@ -66,44 +97,50 @@ class fragment_chat : Fragment() {
         // Inflate the layout for this fragment
         v = FragmentChatBinding.inflate(inflater, container, false)
         pp = binding.imageView8
-        var imageUrl : Uri
 
-
-        //set profile pic
-        db.collection("users").document(docId).get().addOnSuccessListener {
-                e ->
-            imageUrl = Uri.parse(e["Profile"].toString())
-            Picasso.get().load(imageUrl).into(pp)
-
-            if (e["Match"] != null){
-                matchList = e["Match"] as List<String>
-            }
-        }
+        listUrl = mutableListOf<String>()
+        listMsg = mutableListOf<String>()
+        listName = mutableListOf<String>()
 
         pp.setOnClickListener{
                 view ->
             view.findNavController().navigate(R.id.fragment_profile)
         }
 
+        getData { e->
+            if (e){
+//                Log.w("teshoho" , "$listUrl $listName")
+                recyclerView = binding.recyclerView
 
-        recyclerView = binding.root.findViewById(
-            R.id.recyclerView
-        )
+                recyclerView.layoutManager = LinearLayoutManager(activity)
+                val adapter = BimbingAdapter()
 
-        recyclerView?.layoutManager = LinearLayoutManager(activity)
-        val adapter = BimbingAdapter()
+                adapter.listDocIds = matchList as MutableList<String>
+                adapter.listImgUrl = listUrl
+                adapter.listName = listName
+                adapter.listMsg = listMsg
 
+                recyclerView.adapter = adapter
+            }
+        }
 
-
-        // list img
-        // listdocids
-        // listmsg
-        // listname
 
         return v!!.root
     }
 
 
+    var page = 1
+    var isLoading =false
+    var limit = 5
+
+    fun getPage(){
+        val start  = (page-1) * limit
+        val end = (page) * limit
+
+        for (i in start..end){
+
+        }
+    }
 //
 //    class RecyclerAdapter(val activity: Home ) : RecyclerView.Adapter<RecyclerAdapter.RecyclerViewHolder>(){
 //
