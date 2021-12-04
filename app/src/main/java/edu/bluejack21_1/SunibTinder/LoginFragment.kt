@@ -49,6 +49,7 @@ class LoginFragment : Fragment() {
     private var v: FragmentLoginBinding? = null
     private val binding get() = v!!
     private lateinit var sharedPref : SharedPrefConfig
+    val emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -78,6 +79,37 @@ class LoginFragment : Fragment() {
             loadingCircle.setIndeterminate(false)
             loadingCircle.setCancelable(true)
             loadingCircle.show()
+
+            val email = binding.email.text.toString()
+            val password = binding.password.text.toString()
+            if (email.isEmpty() || password.isEmpty()) {
+                Toast.makeText(
+                    this.requireContext(), "All fields can't be empty",
+                    Toast.LENGTH_SHORT
+                ).show()
+                loadingCircle.dismiss()
+                return@setOnClickListener
+            }
+            // valid email format
+            else if (!email.matches(emailPattern.toRegex())){
+                Toast.makeText(
+                    this.requireContext(),
+                    "Email must match the email format",
+                    Toast.LENGTH_SHORT
+                ).show()
+                loadingCircle.dismiss()
+                return@setOnClickListener
+            }
+            else if(!password.contains(Regex("[^A-Za-z]")) || !password.contains(Regex("[A-Za-z]")) || !password.contains(Regex("[!\\\"#\$%&'()*+,-./:;\\\\\\\\<=>?@\\\\[\\\\]^_`{|}~]"))) {
+                Toast.makeText(
+                    this.requireContext(),
+                    "Password must contains at least letter, number, and special character",
+                    Toast.LENGTH_SHORT
+                ).show()
+                loadingCircle.dismiss()
+                return@setOnClickListener
+            }
+
             checkExistsUser {
                 sse->
                 if (!sse){
