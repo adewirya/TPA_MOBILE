@@ -375,7 +375,7 @@ class fragment_suggested : Fragment() {
         val pendingIntent = PendingIntent.getBroadcast(this.requireContext(), 0, alarmIntent, 0)
         alarmManager.cancel(pendingIntent)
         val cal = Calendar.getInstance()
-        cal.add(Calendar.SECOND, 4)
+        cal.add(Calendar.MINUTE, 1)
         alarmManager.setInexactRepeating(
             AlarmManager.RTC_WAKEUP,
             cal.timeInMillis,
