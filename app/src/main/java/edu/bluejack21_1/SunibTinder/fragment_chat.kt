@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.navigation.findNavController
+import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
@@ -59,8 +60,6 @@ class fragment_chat : Fragment() {
         // Inflate the layout for this fragment
         v = FragmentChatBinding.inflate(inflater, container, false)
         pp = binding.imageView8
-
-        Log.w("teschat", docId)
         var imageUrl : Uri
 
 
@@ -73,8 +72,8 @@ class fragment_chat : Fragment() {
             if (e["Match"] != null){
                 matchList = e["Match"] as List<String>
             }
-            Log.w("teschat", matchList.toString())
         }
+
         pp.setOnClickListener{
                 view ->
             view.findNavController().navigate(R.id.fragment_profile)
@@ -82,6 +81,26 @@ class fragment_chat : Fragment() {
 
 
         return v!!.root
+    }
+
+    class RecyclerAdapter : RecyclerView.Adapter<RecyclerAdapter.RecyclerViewHolder>(){
+
+        class RecyclerViewHolder(v : View) : RecyclerView.ViewHolder(v){
+
+        }
+
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerViewHolder {
+            return RecyclerViewHolder(LayoutInflater)
+        }
+
+        override fun onBindViewHolder(holder: RecyclerViewHolder, position: Int) {
+            TODO("Not yet implemented")
+        }
+
+        override fun getItemCount(): Int {
+            TODO("Not yet implemented")
+        }
+
     }
 
     companion object {
