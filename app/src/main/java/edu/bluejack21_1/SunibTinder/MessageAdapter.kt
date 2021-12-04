@@ -5,9 +5,11 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.util.rangeTo
 import androidx.recyclerview.widget.RecyclerView
+import com.squareup.picasso.Picasso
 import org.w3c.dom.Text
 
 class MessageAdapter() : RecyclerView.Adapter<MessageAdapter.ViewHolder>() {
@@ -28,12 +30,18 @@ class MessageAdapter() : RecyclerView.Adapter<MessageAdapter.ViewHolder>() {
     class ViewHolder(view : View) : RecyclerView.ViewHolder(view){
         var text : TextView
         var time : TextView
+        var image : ImageView
         init{
-
+            image = itemView.findViewById<ImageView>(R.id.chatImage)
             text = itemView.findViewById<TextView>(R.id.text)
             time = itemView.findViewById<TextView>(R.id.time)
         }
         fun join(m : Message){
+            if(m.isImage == true){
+                image.visibility = View.VISIBLE
+                Picasso.get().load(m.imageURI).into(image)
+                text.visibility = View.GONE
+            }
             text.setText(m.text)
             time.setText(m.date.toString().substring(m.date.toString().length-5, m.date.toString().length))
         }

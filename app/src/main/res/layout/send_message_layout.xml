@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginRight="15dp"
@@ -15,16 +17,25 @@
         android:gravity="bottom"
         android:text="50:00"
         android:textSize="12sp" />
+
     <TextView
+        android:id="@+id/text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/text"
-        android:padding="8dp"
         android:layout_marginRight="5dp"
-        android:textSize="16sp"
+        android:background="@color/MainColor"
+        android:padding="8dp"
         android:text="Send Message.."
         android:textColor="@color/white"
-        android:background="@color/MainColor"
-        />
+        android:textSize="16sp"
+        android:visibility="visible" />
+
+    <ImageView
+        android:id="@+id/chatImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="0"
+        android:visibility="gone"
+        tools:srcCompat="@tools:sample/avatars" />
 
 </LinearLayout>

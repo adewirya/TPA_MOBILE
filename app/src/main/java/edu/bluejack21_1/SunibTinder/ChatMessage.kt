@@ -141,7 +141,7 @@ class ChatMessage : AppCompatActivity() {
 //            child("messages")?.
 //                child(java.lang.String.valueOf(System.currentTimeMillis()))?.
 //                setValue(Message(messageField.text.toString()))
-        val newMsg = Message(messageField.text.toString(), senderId, receiverId, day + " , " + hour)
+        val newMsg = Message(messageField.text.toString(), senderId, receiverId, day + " , " + hour, false, Uri.EMPTY)
         rDb.child("Message").push().setValue(newMsg).addOnSuccessListener {
             e ->
             Log.w("teschat", "Sent Message")
