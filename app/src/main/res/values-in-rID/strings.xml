@@ -23,9 +23,10 @@
     <string name="modify">Ubah</string>
     <string name="living_in">Tempat Tinggal</string>
     <string name="campus_location">Lokasi Kampus</string>
-    <string name="edit_profile">Edit Profil</string>
+    <string name="edit_profile">Atur Profil</string>
     <string name="new_password">Password Baru</string>
     <string name="confirm_password">Konfirmasi Password</string>
     <string name="input_your_password">Masukkan Password Anda</string>
     <string name="suggestion_preferences">Preferensi</string>
+    <string name="edit_info">Atur Info</string>
 </resources>

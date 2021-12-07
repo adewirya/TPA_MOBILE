@@ -28,6 +28,7 @@
     <string name="confirm_password">Confirm Password</string>
     <string name="input_your_password">Input your password</string>
     <string name="suggestion_preferences">Suggestion Preferences</string>
+    <string name="edit_info">EDIT INFO</string>
 
     <string-array name="binus_locations">
         <item></item>

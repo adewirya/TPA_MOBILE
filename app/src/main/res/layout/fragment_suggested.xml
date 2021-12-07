@@ -34,6 +34,7 @@
                 android:layout_height="0dp"
                 android:layout_marginTop="20dp"
                 app:auto_cycle="false"
+                app:placeholder="@drawable/ic_baseline_local_fire_department_24"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
