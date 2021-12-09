@@ -29,7 +29,9 @@
     <string name="input_your_password">Input your password</string>
     <string name="suggestion_preferences">Suggestion Preferences</string>
     <string name="edit_info">EDIT INFO</string>
-
+    <string name="logout">Log Out</string>
+    <string name="edit_password">Edit Password</string>
+    <string name="edit_email">Edit E-Mail</string>
     <string-array name="binus_locations">
         <item></item>
         <item>Anggrek</item>
@@ -82,6 +84,7 @@
             Inter Campus
         </item>
     </string-array>
+
 
 
 </resources>

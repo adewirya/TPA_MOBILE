@@ -3,6 +3,7 @@ package edu.bluejack21_1.SunibTinder
 import Message
 import android.content.Context
 import android.net.Uri
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -39,11 +40,14 @@ class MessageAdapter() : RecyclerView.Adapter<MessageAdapter.ViewHolder>() {
             time = itemView.findViewById<TextView>(R.id.time)
         }
         fun join(m : Message){
+            Log.w("tesss", "view")
             if(m.isImage.equals("TRUE")){
                 image.visibility = View.VISIBLE
                 Picasso.get().load(Uri.parse(m.text)).into(image)
                 text.visibility = View.GONE
             }else{
+                image.visibility = View.GONE
+                text.visibility = View.VISIBLE
                 text.setText(m.text)
             }
             time.setText(m.date.toString().substring(m.date.toString().length-5, m.date.toString().length))

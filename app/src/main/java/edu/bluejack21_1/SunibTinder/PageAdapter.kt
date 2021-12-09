@@ -1,5 +1,7 @@
 package edu.bluejack21_1.SunibTinder
 
+import android.content.Context
+import android.content.res.Resources
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
@@ -23,14 +25,13 @@ class PageAdapter(fm:FragmentManager) : FragmentPagerAdapter(fm){
         }
 
     }
-
     override fun getPageTitle(position: Int): CharSequence? {
         when(position){
             0 -> {
-                return R.string.login.toString()
+                return "Login"
             }
             1 -> {
-                return R.string.register.toString()
+                return "Register"
             }
 
         }
