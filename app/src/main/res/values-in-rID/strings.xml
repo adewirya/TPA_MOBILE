@@ -29,4 +29,7 @@
     <string name="input_your_password">Masukkan Password Anda</string>
     <string name="suggestion_preferences">Preferensi</string>
     <string name="edit_info">Atur Info</string>
+    <string name="logout">Keluar</string>
+    <string name="edit_password">Sunting Kata Sandi</string>
+    <string name="edit_email">Sunting Email</string>
 </resources>
