@@ -27,10 +27,10 @@ class PageAdapter(fm:FragmentManager) : FragmentPagerAdapter(fm){
     override fun getPageTitle(position: Int): CharSequence? {
         when(position){
             0 -> {
-                return "LOGIN"
+                return "Login"
             }
             1 -> {
-                return "REGISTER"
+                return "Register"
             }
 
         }
