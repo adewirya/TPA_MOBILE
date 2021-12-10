@@ -20,10 +20,10 @@ import com.google.android.gms.tasks.OnCompleteListener
 
 
 
-
 class Settings : AppCompatActivity() {
     lateinit var googleSignInAccount : GoogleSignInAccount
     lateinit var googleSignInClient : GoogleSignInClient
+    lateinit var sharedPref : SharedPrefConfig
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
@@ -32,7 +32,7 @@ class Settings : AppCompatActivity() {
         val btnPassword = findViewById<TextView>(R.id.textView4)
         val btnEmail = findViewById<TextView>(R.id.textView9)
         val btnLogout = findViewById<TextView>(R.id.textView21)
-        val sharedPref = SharedPrefConfig(this)
+        sharedPref = SharedPrefConfig(this)
 
         if (sharedPref.getBoolean("IsGoogle") == true){
             btnPassword.visibility = View.INVISIBLE
@@ -53,23 +53,42 @@ class Settings : AppCompatActivity() {
 
 
 
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestEmail()
-            .build()
 
-        googleSignInClient = GoogleSignIn.getClient(this, gso);
+        val isGoogle = sharedPref.getBoolean("IsGoogle")
 
-        googleSignInAccount = GoogleSignIn.getLastSignedInAccount(this)
+        if (isGoogle == true){
+
+            val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build()
+
+            googleSignInClient = GoogleSignIn.getClient(this, gso);
+
+            googleSignInAccount = GoogleSignIn.getLastSignedInAccount(this)
+        }
 
         btnLogout.setOnClickListener{
-            if(googleSignInAccount != null){
+            if(isGoogle == true){
                 signOut()
+            } else {
+                normalSignOut()
             }
 
         }
 
 
     }
+
+    private fun normalSignOut() {
+//        val fragment = LoginFragment.newInstance()
+//        val transaction = supportFragmentManager.beginTransaction()
+//        transaction.replace(R.id.settings_layout, fragment)
+//        transaction.commit()
+//        sharedPref.clear
+        sharedPref.clearSharedPreference()
+        startActivity(Intent(this, MainActivity::class.java))
+    }
+
     fun signOut(){
 
 

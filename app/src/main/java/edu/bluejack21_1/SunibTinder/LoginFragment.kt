@@ -70,7 +70,13 @@ class LoginFragment : Fragment() {
         // Inflate the layout for this fragment
         v = FragmentLoginBinding.inflate(inflater, container, false)
 
-        var loginBtn = binding.loginBtn
+        val loginBtn = binding.loginBtn
+
+        if (loginBtn.text.toString().equals("Masuk")){
+            sharedPref.putBoolean("IsLocal", true)
+        } else {
+            sharedPref.putBoolean("IsLocal", false)
+        }
 
         loadingCircle = ProgressDialog(this.requireContext())
         loadingCircle.dismiss()
