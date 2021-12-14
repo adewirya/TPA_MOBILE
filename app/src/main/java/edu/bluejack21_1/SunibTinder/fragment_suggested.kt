@@ -152,7 +152,7 @@ class fragment_suggested : Fragment() {
 
     private fun getData(callback: (Boolean) -> Unit){
 
-        pd.setTitle("Getting Data")
+        pd.setTitle(context?.resources?.getString(R.string.getting_data))
         pd.show()
 
         db.collection("users").document(docId).get().addOnSuccessListener {
@@ -161,19 +161,19 @@ class fragment_suggested : Fragment() {
                 listOfLikes = e["Likes"] as MutableList<String>
             }
 
-            pd.setMessage("Getting Liked User.")
+//            pd.setMessage("Getting Liked User.")
 
             if (e["Unlikes"] != null ){
                 listOfUnlikes = e["Unlikes"] as MutableList<String>
             }
 
-            pd.setMessage("Getting Unliked User..")
+//            pd.setMessage("Getting Unliked User..")
 
             if (e["Match"] != null) {
                 listOfMatches = e["Match"] as MutableList<String>
             }
 
-            pd.setMessage("Getting Matched User...")
+//            pd.setMessage("Getting Matched User...")
 
         }.addOnCompleteListener{
             callback(true)
@@ -205,13 +205,13 @@ class fragment_suggested : Fragment() {
         Log.w("teshaha", "search gender : ${searchGender} location : ${location}")
 
         var size : Int = 0
-        pd.setMessage("Getting Suggested User.")
+        pd.setMessage(context?.resources?.getString(R.string.getting_suggested_user))
         db.collection("users").get().addOnSuccessListener {
             e->
             size = e.size()
-            pd.setMessage("Getting Suggested User..")
+            pd.setMessage(context?.resources?.getString(R.string.getting_suggested_user))
         }.addOnCompleteListener{
-            pd.setMessage("Getting Suggested User...")
+            pd.setMessage(context?.resources?.getString(R.string.getting_suggested_user))
             val startAt = Math.ceil(Random.nextDouble(0.0,1.0) * size).toInt()
 
             Log.w("teshehe", startAt.toString())
@@ -428,7 +428,7 @@ class fragment_suggested : Fragment() {
         val slider = binding.imageSliderSuggested
 
         val list = mutableListOf<SlideModel>()
-        pd.setMessage("Assigning to slider")
+//        pd.setMessage(context.resources?.getString()
         getData(documentId) {
                 e->
             if (e){

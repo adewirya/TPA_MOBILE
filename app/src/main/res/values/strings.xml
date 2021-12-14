@@ -5,6 +5,8 @@
     <string name="password">Password</string>
     <string name="login">Login</string>
     <string name="email_binus_ac_id">Email</string>
+    <string name ="getting_data">Getting Data</string>
+    <string name ="getting_suggested_user">Getting Suggested User</string>
     <string name="full_name">Full Name</string>
     <string name="add">Add</string>
     <string name="passions">Passions</string>
@@ -19,7 +21,9 @@
     <string name="new_e_mail">New E-mail</string>
     <string name="confirm_e_mail">Confirm E-mail</string>
     <string name="name">Name</string>
+    <string name="percentage" translatable="false">Percentage</string>
     <string name="age">Age</string>
+    <string name="assign_slider" translatable="false">Assigning to slider</string>
     <string name="modify">Modify</string>
     <string name="living_in">Living In</string>
     <string name="campus_location">Campus Location</string>

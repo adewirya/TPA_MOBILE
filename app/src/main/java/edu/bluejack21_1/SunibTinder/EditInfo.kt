@@ -384,7 +384,7 @@ class   EditInfo : AppCompatActivity() {
     }
 
     private fun setDefaultValues(){
-        pd.setTitle("Getting Data from Database")
+        pd.setTitle(baseContext?.resources?.getString(R.string.getting_data))
         pd.setMessage("Getting User's Info.")
         pd.show()
         db.collection("users").document(uId).get().addOnSuccessListener { e ->
@@ -410,7 +410,7 @@ class   EditInfo : AppCompatActivity() {
                 passionTextView.setText(passionStr)
             }
 
-            pd.setMessage("Getting User's Info...")
+            pd.setMessage(baseContext?.resources?.getString(R.string.getting_data))
 
             val picts : List<String> = e["Carousel"] as List<String>
             var idx : Int = 0
@@ -421,7 +421,7 @@ class   EditInfo : AppCompatActivity() {
                 }
             }
 //            img1.setImageURI(Uri.parse(picts[0]))
-            pd.setMessage("Getting User's Info....")
+            pd.setMessage(baseContext?.resources?.getString(R.string.getting_data))
 
             if (picts.getOrNull(0) != null  && picts.getOrNull(0) != ""){
                 Picasso.get().load(picts[0]).into(img1)

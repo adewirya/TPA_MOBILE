@@ -32,4 +32,6 @@
     <string name="logout">Keluar</string>
     <string name="edit_password">Sunting Kata Sandi</string>
     <string name="edit_email">Sunting Email</string>
+    <string name="getting_data">Mendapatkan Data</string>
+    <string name="getting_suggested_user">Mendapatkan Pengguna</string>
 </resources>

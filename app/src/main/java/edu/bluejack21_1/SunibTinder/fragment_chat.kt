@@ -146,7 +146,7 @@ class fragment_chat : Fragment() {
     private fun getData(startPoint : Int, endPoint : Int, callback : (Boolean) -> Unit){
 
         if (matchList.size > 0 && matchList[0] != "" ){
-            pd.setTitle("Getting Data")
+            pd.setTitle(context?.resources?.getString(R.string.getting_data))
             pd.setMessage("Percentage : 0%")
             pd.show()
 
@@ -214,7 +214,7 @@ class fragment_chat : Fragment() {
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener(){
             override fun onScrolled (recyclerView: RecyclerView, dx : Int, dy : Int){
 
-                    Log.w("teshoho", "masuk scroll + ${end}")
+//                    Log.w("teshoho", "masuk scroll + ${end}")
 
                     val visibleItemCount = LinearLayoutManager(activity).childCount
                     val pastVisibleItem = LinearLayoutManager(activity).findFirstCompletelyVisibleItemPosition()
